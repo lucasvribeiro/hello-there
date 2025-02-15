@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { DEFAULT_COLOR } from '../constants/DefaultColor'
+import { DEFAULT_COLOR } from '../constants'
 import { Color, ColorsHistory } from '../types'
 
 const STORAGE_KEYS = {

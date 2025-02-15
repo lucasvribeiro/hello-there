@@ -6,7 +6,7 @@ import {
   clearColorsHistory
 } from '../storage/asyncStorage'
 import { Color, ColorsHistory } from '../types'
-import { DEFAULT_COLOR } from '../constants/DefaultColor'
+import { DEFAULT_COLOR } from '../constants'
 
 const useColor = () => {
   const [color, setColor] = useState<Color>(DEFAULT_COLOR)
