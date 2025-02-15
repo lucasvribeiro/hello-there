@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
-import { Share, TouchableOpacity, View } from 'react-native'
+import { Share, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import useColor from '@/hooks/useColor'
@@ -14,13 +14,13 @@ import ColorCard from '@/components/ColorCard'
 export default function Index() {
   const { color, colorsHistory, changeColor, clearColors } = useColor()
 
-  // useEffect(() => {
-  //   clearColors()
-  // }, [])
+  useEffect(() => {
+    clearColors()
+  }, [])
 
   return (
-    <View style={{ flex: 1 }}>
-      <StatusBar animated style="light" backgroundColor={`${color.hex}EE`} />
+    <View style={styles.container}>
+      <StatusBar animated style="dark" />
 
       <SafeAreaView style={{ position: 'relative', flex: 1 }}>
         <ColorCard
@@ -40,3 +40,12 @@ export default function Index() {
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: '#DDDDDD',
+    justifyContent: 'center'
+  }
+})
