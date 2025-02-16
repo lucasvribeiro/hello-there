@@ -44,20 +44,15 @@ const ColorsHistory = ({
 
 const styles = StyleSheet.create({
   container: {
+    height: 80,
+    borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FFFFFF',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    borderRadius: 20,
-    overflow: 'hidden',
+    backgroundColor: '#222222'
   },
   flatListContainer: {
-    paddingVertical: 15,
-    backgroundColor: '#FFFFFF',
+    paddingVertical: 10,
+    minWidth: '100%'
   }
 })
 

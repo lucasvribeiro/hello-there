@@ -1,5 +1,5 @@
-import { TouchableOpacity, StyleSheet } from 'react-native'
-import React from 'react'
+import { TouchableOpacity, StyleSheet, Animated } from 'react-native'
+import React, { useEffect, useState } from 'react'
 
 type ColorSquareProps = {
   hex: string | undefined
@@ -8,11 +8,23 @@ type ColorSquareProps = {
 }
 
 const ColorSquare = ({ hex, selected, onPress }: ColorSquareProps) => {
+  const scaleValue = useState(new Animated.Value(0))[0]
+
+  useEffect(() => {
+    Animated.spring(scaleValue, {
+      toValue: 1,
+      tension: 100,
+      friction: 7,
+      useNativeDriver: true
+    }).start()
+  }, [])
+
   const styles = StyleSheet.create({
     square: {
-      width: 70,
-      height: 70,
-      marginRight: 8,
+      width: 54,
+      height: 54,
+      marginVertical: 3,
+      marginHorizontal: 4,
       borderRadius: 15,
       backgroundColor: hex,
       borderWidth: 3,
@@ -25,7 +37,13 @@ const ColorSquare = ({ hex, selected, onPress }: ColorSquareProps) => {
     }
   })
 
-  return <TouchableOpacity style={styles.square} onPress={onPress} />
+  return (
+    <TouchableOpacity onPress={onPress}>
+      <Animated.View
+        style={[styles.square, { transform: [{ scale: scaleValue }] }]}
+      />
+    </TouchableOpacity>
+  )
 }
 
 export default ColorSquare

@@ -1,18 +1,38 @@
 import { useEffect, useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
-import { Share, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import useColor from '@/hooks/useColor'
-import ColorText from '@/components/ColorText'
-import Ionicons from '@expo/vector-icons/Ionicons'
-import ActionButton from '@/components/ActionButton'
 import ColorsHistory from '@/components/ColorsHistory'
-import { getLuminance, getHexColor, generateRandomValues } from '@/utils/colors'
 import ColorCard from '@/components/ColorCard'
+import Toast from '@/components/Toast'
+import { ACHIEVEMENTS } from '@/constants'
 
 export default function Index() {
-  const { color, colorsHistory, changeColor, clearColors } = useColor()
+  const {
+    color,
+    colorsHistory,
+    changeColor,
+    clearColors,
+    favorites,
+    addFavorite,
+    removeFavorite
+  } = useColor()
+
+  const [showToast, setShowToast] = useState(false)
+  const [achievement, setAchievement] = useState<
+    (typeof ACHIEVEMENTS)[number] | null
+  >(null)
+  useEffect(() => {
+    const achievement = ACHIEVEMENTS.find(
+      (achievement) => achievement.trigger === colorsHistory.length
+    )
+    if (achievement) {
+      setAchievement(achievement)
+      setShowToast(true)
+    }
+  }, [colorsHistory])
 
   useEffect(() => {
     clearColors()
@@ -22,20 +42,29 @@ export default function Index() {
     <View style={styles.container}>
       <StatusBar animated style="dark" />
 
+      <Toast
+        visible={showToast}
+        message={`${
+          achievement ? `${achievement.icon} ${achievement.title}` : ''
+        }`}
+        onHide={() => setShowToast(false)}
+      />
+
       <SafeAreaView style={{ position: 'relative', flex: 1 }}>
         <ColorCard
           color={color}
           colorsHistory={colorsHistory}
           changeColor={changeColor}
+          favorites={favorites}
+          addFavorite={addFavorite}
+          removeFavorite={removeFavorite}
         />
 
-        {colorsHistory.length ? (
-          <ColorsHistory
-            color={color}
-            colorsHistory={colorsHistory}
-            changeColor={changeColor}
-          />
-        ) : null}
+        <ColorsHistory
+          color={color}
+          colorsHistory={colorsHistory}
+          changeColor={changeColor}
+        />
       </SafeAreaView>
     </View>
   )
@@ -45,7 +74,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    backgroundColor: '#DDDDDD',
+    backgroundColor: '#222222',
     justifyContent: 'center'
   }
 })

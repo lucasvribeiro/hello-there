@@ -3,10 +3,27 @@ import React from 'react'
 
 interface ActionButtonProps {
   icon: React.ReactNode
+  backgroundColor?: string
   onPress: () => void
 }
 
-const ActionButton = ({ onPress, icon }: ActionButtonProps) => {
+const ActionButton = ({
+  onPress,
+  icon,
+  backgroundColor
+}: ActionButtonProps) => {
+  const styles = StyleSheet.create({
+    button: {
+      width: 40,
+      height: 40,
+      padding: 5,
+      borderRadius: 1000,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: backgroundColor || '#FFFFFF33'
+    }
+  })
+
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -17,17 +34,5 @@ const ActionButton = ({ onPress, icon }: ActionButtonProps) => {
     </TouchableOpacity>
   )
 }
-
-const styles = StyleSheet.create({
-  button: {
-    width: 40,
-    height: 40,
-    padding: 5,
-    borderRadius: 1000,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#FFFFFF11',
-  }
-})
 
 export default ActionButton

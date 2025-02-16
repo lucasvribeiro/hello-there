@@ -4,3 +4,5 @@ export type Color = {
 }
 
 export type ColorsHistory = Color[]
+
+export type Favorites = Color[]

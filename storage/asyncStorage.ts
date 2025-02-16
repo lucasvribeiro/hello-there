@@ -1,10 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { DEFAULT_COLOR } from '../constants'
-import { Color, ColorsHistory } from '../types'
+import { Color, ColorsHistory, Favorites } from '../types'
 
 const STORAGE_KEYS = {
   COLOR: 'color',
-  COLORS_HISTORY: 'colorsHistory'
+  COLORS_HISTORY: 'colorsHistory',
+  FAVORITES: 'favorites'
 }
 
 export const saveColor = async (color: Color) => {
@@ -45,6 +46,27 @@ export const getColorsHistory = async () => {
   } catch (error) {
     console.error('[ERROR] getColorsHistory:', error)
     return []
+  }
+}
+
+export const getFavorites = async () => {
+  try {
+    const favorites = await AsyncStorage.getItem(STORAGE_KEYS.FAVORITES)
+    return favorites ? JSON.parse(favorites) : []
+  } catch (error) {
+    console.error('[ERROR] getFavorites:', error)
+    return []
+  }
+}
+
+export const updateFavorites = async (favorites: Favorites) => {
+  try {
+    await AsyncStorage.setItem(
+      STORAGE_KEYS.FAVORITES,
+      JSON.stringify(favorites)
+    )
+  } catch (error) {
+    console.error('[ERROR] updateFavorites:', error)
   }
 }
 
