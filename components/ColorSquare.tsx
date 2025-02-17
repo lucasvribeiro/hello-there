@@ -1,13 +1,14 @@
-import { TouchableOpacity, StyleSheet, Animated } from 'react-native'
 import React, { useEffect, useState } from 'react'
+import { StyleSheet, Animated, Pressable } from 'react-native'
+
+import { DEFAULT_SHADOW } from '@/constants'
 
 type ColorSquareProps = {
-  hex: string | undefined
-  selected: boolean
+  color: string
   onPress: () => void
 }
 
-const ColorSquare = ({ hex, selected, onPress }: ColorSquareProps) => {
+const ColorSquare = ({ color, onPress }: ColorSquareProps) => {
   const scaleValue = useState(new Animated.Value(0))[0]
 
   useEffect(() => {
@@ -19,31 +20,28 @@ const ColorSquare = ({ hex, selected, onPress }: ColorSquareProps) => {
     }).start()
   }, [])
 
-  const styles = StyleSheet.create({
-    square: {
-      width: 54,
-      height: 54,
-      marginVertical: 3,
-      marginHorizontal: 4,
-      borderRadius: 15,
-      backgroundColor: hex,
-      borderWidth: 3,
-      borderColor: '#FFFFFF',
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.25,
-      shadowRadius: 3.84,
-      elevation: 5
-    }
-  })
-
   return (
-    <TouchableOpacity onPress={onPress}>
+    <Pressable onPress={onPress}>
       <Animated.View
-        style={[styles.square, { transform: [{ scale: scaleValue }] }]}
+        style={[
+          styles.square,
+          { transform: [{ scale: scaleValue }], backgroundColor: `#${color}` }
+        ]}
       />
-    </TouchableOpacity>
+    </Pressable>
   )
 }
+
+const styles = StyleSheet.create({
+  square: {
+    width: 60,
+    height: 60,
+    borderWidth: 6,
+    borderRadius: 15,
+    marginHorizontal: 4,
+    borderColor: '#FFFFFF',
+    ...DEFAULT_SHADOW
+  }
+})
 
 export default ColorSquare

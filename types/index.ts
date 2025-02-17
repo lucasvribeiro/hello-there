@@ -1,8 +1,23 @@
-export type Color = {
+export interface Color {
   hex: string
+  name?: string
   luminance: number
 }
 
-export type ColorsHistory = Color[]
+export interface ColorData {
+  name: string
+  hex: string
+  image: string
+  contrast: string
+}
 
-export type Favorites = Color[]
+export interface ColorContext {
+  color: Color | null
+  setColor: (color: Color) => void
+}
+
+export interface ColorDataContext {
+  colorData: ColorData | null
+  error: Error | null
+  isLoading: boolean
+}

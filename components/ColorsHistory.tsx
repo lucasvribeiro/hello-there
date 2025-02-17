@@ -1,41 +1,39 @@
 import { useEffect, useRef } from 'react'
-import { View, Text, StyleSheet, FlatList } from 'react-native'
+import { View, StyleSheet, FlatList } from 'react-native'
+import * as Haptics from 'expo-haptics'
+import { setColor } from '@/redux/reducers/color'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { Color } from '@/types'
 import ColorSquare from './ColorSquare'
-import { ColorsHistory as ColorsHistoryType } from '@/types'
 
-type ColorsHistoryProps = {
-  color: ColorsHistoryType[number]
-  colorsHistory: ColorsHistoryType
-  changeColor: (color: ColorsHistoryType[number]) => void
-}
+const ColorsHistory = () => {
+  const dispatch = useDispatch()
 
-const ColorsHistory = ({
-  color,
-  colorsHistory,
-  changeColor
-}: ColorsHistoryProps) => {
   const flatListRef = useRef<FlatList>(null)
+  const history = useSelector((state: any) => state.color.history)
 
   useEffect(() => {
-    if (colorsHistory.length > 0) {
+    if (history.length > 0) {
       flatListRef.current?.scrollToEnd({ animated: true })
     }
-  }, [colorsHistory])
+  }, [history])
+
+  const handleColorPress = (item: Color) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+    dispatch(setColor(item))
+  }
 
   return (
     <View style={styles.container}>
       <FlatList
         horizontal
+        data={history}
         ref={flatListRef}
-        data={colorsHistory}
         keyExtractor={(item) => item.hex}
         contentContainerStyle={styles.flatListContainer}
         renderItem={({ item }) => (
-          <ColorSquare
-            selected={item.hex === color.hex}
-            hex={item.hex}
-            onPress={() => changeColor(item)}
-          />
+          <ColorSquare color={item.hex} onPress={() => handleColorPress(item)} />
         )}
       />
     </View>
@@ -43,16 +41,9 @@ const ColorsHistory = ({
 }
 
 const styles = StyleSheet.create({
-  container: {
-    height: 80,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#222222'
-  },
+  container: {},
   flatListContainer: {
-    paddingVertical: 10,
-    minWidth: '100%'
+    paddingVertical: 15,
   }
 })
 

@@ -1,5 +1,19 @@
 export const DEFAULT_COLOR = { hex: '#FFFFFF', luminance: 1 }
 
+export const STORAGE_KEYS = {
+  COLOR: 'color',
+  COLORS_HISTORY: 'colorsHistory',
+  FAVORITES: 'favorites'
+}
+
+export const DEFAULT_SHADOW = {
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.25,
+  shadowRadius: 3,
+  elevation: 5
+}
+
 export const ACHIEVEMENTS = [
   {
     id: 0,

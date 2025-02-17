@@ -1,38 +1,73 @@
-import { TouchableOpacity, Text, StyleSheet } from 'react-native'
-import React from 'react'
+import {
+  StyleSheet,
+  Pressable,
+  Animated,
+  Text,
+  TextStyle,
+  ViewStyle,
+  StyleProp
+} from 'react-native'
+import React, { useRef } from 'react'
 
 interface ActionButtonProps {
-  icon: React.ReactNode
-  backgroundColor?: string
+  text?: string
+  icon?: React.ReactNode
+  textStyle?: StyleProp<TextStyle>
+  containerStyle?: StyleProp<ViewStyle>
   onPress: () => void
 }
 
-const ActionButton = ({
-  onPress,
-  icon,
-  backgroundColor
-}: ActionButtonProps) => {
-  const styles = StyleSheet.create({
-    button: {
-      width: 40,
-      height: 40,
-      padding: 5,
-      borderRadius: 1000,
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: backgroundColor || '#FFFFFF33'
-    }
-  })
+const ActionButton = ({ icon, text, textStyle, containerStyle, onPress }: ActionButtonProps) => {
+  const scaleValue = useRef(new Animated.Value(1)).current
+
+  const handlePressIn = () => {
+    Animated.spring(scaleValue, {
+      toValue: 0.9,
+      speed: 50,
+      useNativeDriver: true
+    }).start()
+  }
+
+  const handlePressOut = () => {
+    Animated.spring(scaleValue, {
+      toValue: 1,
+      speed: 50,
+      useNativeDriver: true
+    }).start()
+  }
 
   return (
-    <TouchableOpacity
-      onPress={onPress}
-      style={styles.button}
-      activeOpacity={0.8}
-    >
-      {icon}
-    </TouchableOpacity>
+    <Pressable onPress={onPress} onPressIn={handlePressIn} onPressOut={handlePressOut}>
+      <Animated.View
+        style={[
+          styles.button,
+          containerStyle,
+          {
+            transform: [{ scale: scaleValue }]
+          }
+        ]}
+      >
+        {icon}
+
+        {text && <Text style={[textStyle, styles.textStyles]}>{text}</Text>}
+      </Animated.View>
+    </Pressable>
   )
 }
+
+const styles = StyleSheet.create({
+  button: {
+    padding: 8,
+    borderRadius: 100,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFFFFF44'
+  },
+  textStyles: {
+    fontSize: 28,
+    color: '#FFFFFF',
+    fontFamily: 'Nunito-ExtraBold'
+  }
+})
 
 export default ActionButton

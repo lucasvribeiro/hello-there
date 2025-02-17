@@ -1,79 +1,31 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { DEFAULT_COLOR } from '../constants'
-import { Color, ColorsHistory, Favorites } from '../types'
 
-const STORAGE_KEYS = {
-  COLOR: 'color',
-  COLORS_HISTORY: 'colorsHistory',
-  FAVORITES: 'favorites'
-}
-
-export const saveColor = async (color: Color) => {
+export const getFromStorage = async (key: string): Promise<any | null> => {
   try {
-    await AsyncStorage.setItem(STORAGE_KEYS.COLOR, JSON.stringify(color))
-    const colorsHistory: ColorsHistory = await getColorsHistory()
+    const item = await AsyncStorage.getItem(key)
 
-    if (!colorsHistory.some((c: Color) => c.hex === color.hex)) {
-      colorsHistory.push(color)
-      await AsyncStorage.setItem(
-        STORAGE_KEYS.COLORS_HISTORY,
-        JSON.stringify(colorsHistory)
-      )
-    }
+    return item ? JSON.parse(item) : null
   } catch (error) {
-    console.error('[ERROR] saveColor:', error)
+    console.error('[ERROR] getFromStorage:', error)
+    return null
   }
 }
 
-export const getColor = async () => {
+export const saveToStorage = async (key: string, item: any): Promise<boolean> => {
   try {
-    const color = await AsyncStorage.getItem(STORAGE_KEYS.COLOR)
+    await AsyncStorage.setItem(key, JSON.stringify(item))
 
-    return color ? JSON.parse(color) : DEFAULT_COLOR
+    return true
   } catch (error) {
-    console.error('[ERROR] getColor:', error)
-    return DEFAULT_COLOR
+    console.error(`[ERROR] saveToStorage - key: ${key}`, error)
+    return false
   }
 }
 
-export const getColorsHistory = async () => {
-  try {
-    const colorsHistory = await AsyncStorage.getItem(
-      STORAGE_KEYS.COLORS_HISTORY
-    )
-
-    return colorsHistory ? JSON.parse(colorsHistory) : []
-  } catch (error) {
-    console.error('[ERROR] getColorsHistory:', error)
-    return []
-  }
-}
-
-export const getFavorites = async () => {
-  try {
-    const favorites = await AsyncStorage.getItem(STORAGE_KEYS.FAVORITES)
-    return favorites ? JSON.parse(favorites) : []
-  } catch (error) {
-    console.error('[ERROR] getFavorites:', error)
-    return []
-  }
-}
-
-export const updateFavorites = async (favorites: Favorites) => {
-  try {
-    await AsyncStorage.setItem(
-      STORAGE_KEYS.FAVORITES,
-      JSON.stringify(favorites)
-    )
-  } catch (error) {
-    console.error('[ERROR] updateFavorites:', error)
-  }
-}
-
-export const clearColorsHistory = async () => {
+export const clearStorage = async () => {
   try {
     await AsyncStorage.clear()
   } catch (error) {
-    console.error('[ERROR] clearColorsHistory:', error)
+    console.error('[ERROR] clearStorage:', error)
   }
 }
