@@ -1,9 +1,12 @@
-import { useFonts } from 'expo-font'
-import { SplashScreen, Stack } from 'expo-router'
 import { useEffect } from 'react'
+import { SplashScreen, Stack } from 'expo-router'
+import { useFonts } from 'expo-font'
+import { persistor, store } from '@/redux/store'
+import { Provider } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react'
 
 export default function RootLayout() {
-  const [fontsLoaded] = useFonts({
+  const [loaded, error] = useFonts({
     'Nunito-Black': require('../assets/fonts/Nunito-Black.ttf'),
     'Nunito-Bold': require('../assets/fonts/Nunito-Bold.ttf'),
     'Nunito-ExtraBold': require('../assets/fonts/Nunito-ExtraBold.ttf'),
@@ -13,18 +16,19 @@ export default function RootLayout() {
   })
 
   useEffect(() => {
-    if (fontsLoaded) {
-      SplashScreen.hideAsync()
-    }
-  }, [fontsLoaded])
+    if (loaded || error) SplashScreen.hideAsync()
+  }, [loaded, error])
 
-  if (!fontsLoaded) return null
+  if (!loaded && !error) return null
 
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false
-      }}
-    />
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="index" options={{ title: 'Home' }} />
+          <Stack.Screen name="game" options={{ title: 'Game' }} />
+        </Stack>
+      </PersistGate>
+    </Provider>
   )
 }
