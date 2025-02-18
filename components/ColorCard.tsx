@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Share, View, StyleSheet, Pressable, useColorScheme } from 'react-native'
 import * as Haptics from 'expo-haptics'
@@ -13,15 +13,15 @@ import { DEFAULT_SHADOW } from '@/constants'
 import ActionButton from './ActionButton'
 import { useToastContext } from '@/contexts/ToastContext'
 import { Colors } from '@/constants/Colors'
+import { Directions, Gesture, GestureDetector } from 'react-native-gesture-handler'
 
 const ColorCard = () => {
   const dispatch = useDispatch()
   const colorScheme = useColorScheme() ?? 'light'
 
   const color = useSelector((state: any) => state.color.color)
+  const history = useSelector((state: any) => state.color.history)
   const [isModalVisible, setIsModalVisible] = useState(false)
-
-  console.log(color?.luminance)
 
   const contrastColor = color?.luminance
     ? color?.luminance < 0.179
@@ -29,49 +29,64 @@ const ColorCard = () => {
       : '#111111'
     : Colors[colorScheme].text
 
-  const handleTouch = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-
-    const newColor = getColor()
-    dispatch(setColor(newColor))
-    dispatch(addToHistory(newColor))
-  }
-
   const handleCopy = () => {
     Clipboard.setStringAsync(`#${color.hex}`)
   }
 
-  return (
-    <View style={[styles.card, { backgroundColor: Colors[colorScheme].background }]}>
-      <Pressable
-        onPress={handleTouch}
-        style={[styles.cardPressable, { backgroundColor: `#${color.hex}` }]}
-      >
-        <View style={styles.actionsContainer}>
-          <InfoButton
-            isModalVisible={isModalVisible}
-            setIsModalVisible={setIsModalVisible}
-            color={contrastColor}
-          />
+  const flingRight = Gesture.Fling()
+    .direction(Directions.RIGHT)
+    .onStart(() => {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
 
-          <View style={styles.rightButtons}>
-            <FavoriteButton contrastColor={contrastColor} />
-            <ShareButton contrastColor={contrastColor} />
+      let newColor = getColor()
+
+      console.log('newColor', newColor)
+      dispatch(setColor(newColor))
+      dispatch(addToHistory(newColor))
+    })
+    .runOnJS(true)
+
+  const flingLeft = Gesture.Fling()
+    .direction(Directions.LEFT)
+    .onStart(() => {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+
+      const prevColor = history[history.length - 2]
+
+      dispatch(setColor(prevColor))
+    })
+    .runOnJS(true)
+
+  return (
+    <GestureDetector gesture={Gesture.Simultaneous(flingRight, flingLeft)}>
+      <View style={[styles.card, { backgroundColor: Colors[colorScheme].background }]}>
+        <View style={[styles.cardContent, { backgroundColor: `#${color.hex}` }]}>
+          <View style={styles.actionsContainer}>
+            <InfoButton
+              isModalVisible={isModalVisible}
+              setIsModalVisible={setIsModalVisible}
+              color={contrastColor}
+            />
+
+            <View style={styles.rightButtons}>
+              <FavoriteButton contrastColor={contrastColor} />
+              <ShareButton contrastColor={contrastColor} />
+            </View>
           </View>
+
+          <ActionButton
+            onPress={handleCopy}
+            containerStyle={[styles.hexButton, { backgroundColor: `${contrastColor}22` }]}
+            textStyle={{ color: contrastColor }}
+            text={`#${color.hex}`}
+          />
         </View>
 
-        <ActionButton
-          onPress={handleCopy}
-          containerStyle={[styles.hexButton, { backgroundColor: `${contrastColor}22` }]}
-          textStyle={{ color: contrastColor }}
-          text={`#${color.hex}`}
-        />
-      </Pressable>
-
-      {isModalVisible && (
-        <InfoModal isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible} />
-      )}
-    </View>
+        {isModalVisible && (
+          <InfoModal isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible} />
+        )}
+      </View>
+    </GestureDetector>
   )
 }
 
@@ -153,7 +168,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     ...DEFAULT_SHADOW
   },
-  cardPressable: {
+  cardContent: {
     flex: 1,
     borderRadius: 12,
     alignItems: 'center',
