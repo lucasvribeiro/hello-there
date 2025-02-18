@@ -7,6 +7,7 @@ import { persistor, store } from '@/redux/store'
 import { PersistGate } from 'redux-persist/integration/react'
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ToastProvider } from '@/contexts/ToastContext'
 
 const queryClient = new QueryClient()
 
@@ -32,12 +33,11 @@ export default function RootLayout() {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <QueryClientProvider client={queryClient}>
-          <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-            <Stack screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="index" options={{ title: 'Home' }} />
-              <Stack.Screen name="game" options={{ title: 'Game' }} />
-            </Stack>
-          </ThemeProvider>
+          <ToastProvider>
+            <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+              <Stack screenOptions={{ headerShown: false }} />
+            </ThemeProvider>
+          </ToastProvider>
         </QueryClientProvider>
       </PersistGate>
     </Provider>

@@ -1,8 +1,11 @@
 export const DEFAULT_COLOR = { hex: '#FFFFFF', luminance: 1 }
 
+export const MAXIMUM_HISTORY_LENGTH = 100
+
+export const MAXIMUM_FAVORITES_LENGTH = 50
+
 export const STORAGE_KEYS = {
   COLOR: 'color',
-  COLORS_HISTORY: 'colorsHistory',
   FAVORITES: 'favorites'
 }
 

@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Animated, Pressable } from 'react-native'
+import { StyleSheet, Animated, Pressable, useColorScheme } from 'react-native'
 
 import { DEFAULT_SHADOW } from '@/constants'
+import { Colors } from '@/constants/Colors'
 
 type ColorSquareProps = {
+  size?: number
+  padding?: number
   color: string
   onPress: () => void
+  withBorder?: boolean
 }
 
-const ColorSquare = ({ color, onPress }: ColorSquareProps) => {
+const ColorSquare = ({ color, onPress, size = 60, padding = 6, withBorder = false }: ColorSquareProps) => {
+  const colorScheme = useColorScheme() ?? 'light'
   const scaleValue = useState(new Animated.Value(0))[0]
 
   useEffect(() => {
@@ -22,7 +27,20 @@ const ColorSquare = ({ color, onPress }: ColorSquareProps) => {
 
   return (
     <Animated.View style={{ transform: [{ scale: scaleValue }] }}>
-      <Pressable onPress={onPress} style={styles.pressable}>
+      <Pressable
+        onPress={onPress}
+        style={[
+          styles.pressable,
+          {
+            width: size,
+            height: size,
+            padding,
+            backgroundColor: Colors[colorScheme].background,
+            borderWidth: withBorder ? 1 : 0,
+            borderColor: Colors[colorScheme].textLight
+          }
+        ]}
+      >
         <Animated.View style={[styles.square, { backgroundColor: `#${color}` }]} />
       </Pressable>
     </Animated.View>
@@ -31,12 +49,7 @@ const ColorSquare = ({ color, onPress }: ColorSquareProps) => {
 
 const styles = StyleSheet.create({
   pressable: {
-    width: 60,
-    height: 60,
-    padding: 6,
     borderRadius: 12,
-    marginHorizontal: 4,
-    backgroundColor: '#FFFFFF',
     ...DEFAULT_SHADOW
   },
   square: {

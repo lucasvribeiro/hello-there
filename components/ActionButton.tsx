@@ -49,7 +49,7 @@ const ActionButton = ({ icon, text, textStyle, containerStyle, onPress }: Action
       >
         {icon}
 
-        {text && <Text style={[textStyle, styles.textStyles]}>{text}</Text>}
+        {text && <Text style={[styles.textStyles, textStyle]}>{text}</Text>}
       </Animated.View>
     </Pressable>
   )

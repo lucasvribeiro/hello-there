@@ -1,4 +1,12 @@
-import { View, StyleSheet, Pressable, Text, ActivityIndicator, Animated } from 'react-native'
+import {
+  View,
+  StyleSheet,
+  Pressable,
+  Text,
+  ActivityIndicator,
+  Animated,
+  useColorScheme
+} from 'react-native'
 import { useSelector } from 'react-redux'
 import * as Speech from 'expo-speech'
 import * as Clipboard from 'expo-clipboard'
@@ -11,35 +19,22 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 import { ColorData } from '@/types'
 import { useState } from 'react'
 import ColorPalette from './ColorPalette'
+import Loading from './Loading'
+import { Colors } from '@/constants/Colors'
 interface InfoModalProps {
   isModalVisible: boolean
   setIsModalVisible: (visible: boolean) => void
 }
 
 const InfoModal = ({ isModalVisible, setIsModalVisible }: InfoModalProps) => {
+  const colorScheme = useColorScheme() ?? 'light'
   const color = useSelector((state: any) => state.color.color)
   const { colorData, error, isLoading } = useColorData()
 
-  if (isLoading)
-    return (
-      <View
-        style={{
-          zIndex: 10,
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          justifyContent: 'center',
-          backgroundColor: '#000000CC',
-          alignItems: 'center'
-        }}
-      >
-        <ActivityIndicator size="large" color="#FFFFFF" />
-      </View>
-    )
+  console.log(colorData?.contrast)
 
   if (error) return null
+  if (isLoading) return <Loading />
 
   return (
     <Modal visible={isModalVisible} onClose={() => setIsModalVisible(false)}>
@@ -48,7 +43,14 @@ const InfoModal = ({ isModalVisible, setIsModalVisible }: InfoModalProps) => {
       <View style={styles.content}>
         <View style={styles.colorNameContainer}>
           <Text
-            style={[styles.hexColor, { backgroundColor: `#${color.hex}` }]}
+            style={[
+              styles.hexColor,
+              {
+                backgroundColor: `#${color.hex}`,
+                borderColor: `${colorData?.contrast}CC`,
+                color: `${colorData?.contrast}EE`
+              }
+            ]}
           >{`${colorData?.name}`}</Text>
 
           <SpeakButton colorData={colorData} />
@@ -75,6 +77,7 @@ const ColorCode = ({
   value: string | Array<number> | undefined
 }) => {
   const color = useSelector((state: any) => state.color.color)
+  const colorScheme = useColorScheme() ?? 'light'
   const valueString = Array.isArray(value) ? value.join(', ') : value
   const [scale] = useState(new Animated.Value(1))
 
@@ -102,7 +105,7 @@ const ColorCode = ({
 
   return (
     <View style={styles.colorCodeContainer}>
-      <Text style={styles.colorCodeText}>{label}</Text>
+      <Text style={[styles.colorCodeText, { color: Colors[colorScheme].textLight }]}>{label}</Text>
 
       <Animated.View style={animatedStyle}>
         <Pressable
@@ -111,7 +114,9 @@ const ColorCode = ({
           onPressIn={handlePressIn}
           onPressOut={handlePressOut}
         >
-          <Text style={styles.colorCodeValue}>{`${valueString}`}</Text>
+          <Text style={[styles.colorCodeValue, { color: Colors[colorScheme].text }]}>
+            {`${valueString}`}
+          </Text>
           <ActionButton
             onPress={handleCopy}
             containerStyle={styles.copyButton}
@@ -134,7 +139,7 @@ const SpeakButton = ({ colorData }: { colorData: ColorData | null }) => {
     <View style={styles.speakContainer}>
       <ActionButton
         onPress={speakColorName}
-        containerStyle={styles.speakButton}
+        containerStyle={[styles.speakButton, { backgroundColor: `${colorData?.contrast}EE` }]}
         icon={<Ionicons name="mic-outline" size={18} color={`${colorData?.hex}`} />}
       />
     </View>
@@ -157,14 +162,12 @@ const styles = StyleSheet.create({
   },
   colorCodeText: {
     fontSize: 12,
-    fontFamily: 'Nunito-Light',
-    color: '#999999'
+    fontFamily: 'Nunito-Light'
   },
   colorCodeValue: {
     lineHeight: 26,
     fontSize: 20,
-    fontFamily: 'Nunito-Black',
-    color: '#333333'
+    fontFamily: 'Nunito-Black'
   },
   border: {
     position: 'absolute',
@@ -181,7 +184,6 @@ const styles = StyleSheet.create({
   },
   colorNameContainer: {
     alignSelf: 'center',
-    position: 'relative',
     marginBottom: 10
   },
   speakContainer: {
@@ -191,7 +193,6 @@ const styles = StyleSheet.create({
     position: 'absolute'
   },
   speakButton: {
-    backgroundColor: '#FFFFFF',
     borderRadius: 18,
     padding: 5,
     justifyContent: 'center',
@@ -204,11 +205,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-Bold',
     borderRadius: 18,
     borderWidth: 4,
-    borderColor: '#FFFFFF',
     paddingVertical: 10,
     paddingHorizontal: 16,
     textAlign: 'center',
-    color: '#FFFFFF',
     ...DEFAULT_SHADOW
   }
 })

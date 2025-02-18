@@ -1,72 +1,64 @@
+import { DEFAULT_SHADOW } from '@/constants'
+import { Colors } from '@/constants/Colors'
+import { useToastContext } from '@/contexts/ToastContext'
 import { useEffect, useRef } from 'react'
-import { StyleSheet, Animated, Text, View } from 'react-native'
+import { StyleSheet, Animated, Text, useColorScheme } from 'react-native'
 
-interface ToastProps {
-  message: string
-  visible: boolean
-  onHide?: () => void
-}
+const Toast = () => {
+  const { toast, setToast } = useToastContext()
+  const colorScheme = useColorScheme() ?? 'light'
+  const { message, visible, time, offset } = toast
 
-const Toast = ({ message, visible, onHide }: ToastProps) => {
   const translateY = useRef(new Animated.Value(-100)).current
 
   useEffect(() => {
     if (visible) {
       Animated.sequence([
         Animated.spring(translateY, {
-          speed: 20,
-          toValue: 60,
-          bounciness: 16,
+          speed: 10,
+          bounciness: 5,
+          toValue: offset || 50,
           useNativeDriver: true
         }),
-        Animated.delay(5000),
+        Animated.delay(time || 500),
         Animated.spring(translateY, {
-          speed: 20,
+          speed: 50,
           toValue: -100,
           useNativeDriver: true
         })
       ]).start(() => {
-        onHide?.()
+        setToast({ message: '', visible: false })
       })
     }
   }, [visible])
+
+  if (!visible) return null
 
   return (
     <Animated.View
       style={[
         styles.container,
-        {
-          transform: [{ translateY }]
-        }
+        { transform: [{ translateY }], backgroundColor: Colors[colorScheme].backgroundLight }
       ]}
     >
-      <Text style={styles.message}>{message}</Text>
+      <Text style={[styles.message, { color: Colors[colorScheme].text }]}>{message}</Text>
     </Animated.View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    top: 0,
-    position: 'absolute',
+    zIndex: 100,
     alignSelf: 'center',
-    backgroundColor: '#DDDDDD',
-    paddingVertical: 6,
-    paddingHorizontal: 16,
-    borderRadius: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    zIndex: 100
+    position: 'absolute',
+    borderRadius: 16,
+    paddingVertical: 4,
+    paddingHorizontal: 14,
+    ...DEFAULT_SHADOW
   },
   message: {
     fontSize: 14,
-    color: '#333333',
+    color: '#222222',
     textAlign: 'center',
     fontFamily: 'Nunito-Black'
   }

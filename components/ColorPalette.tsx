@@ -1,58 +1,71 @@
-import { View, Text, StyleSheet, Pressable } from 'react-native'
+import { View, Text, StyleSheet, Pressable, useColorScheme } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import useColorPalette from '@/hooks/useColorPalette'
 import { DEFAULT_SHADOW, COLOR_PALETTES } from '@/constants'
+import { Colors } from '@/constants/Colors'
 
-const PaletteColors = ({ colors }: { colors: Array<{ hex: string }> }) => (
-  <View style={styles.colorPalette}>
-    {colors.map((color, index) => (
-      <View
-        key={color.hex}
-        style={{
-          width: 48,
-          height: 48,
-          backgroundColor: `${color.hex}`,
-          borderTopLeftRadius: index === 0 ? 8 : 0,
-          borderBottomLeftRadius: index === 0 ? 8 : 0,
-          borderTopRightRadius: index === colors.length - 1 ? 8 : 0,
-          borderBottomRightRadius: index === colors.length - 1 ? 8 : 0
-        }}
-      />
-    ))}
-  </View>
-)
+const PaletteColors = ({ colors }: { colors: Array<{ hex: string }> }) => {
+  const colorScheme = useColorScheme() ?? 'light'
+
+  return (
+    <View style={[styles.colorPalette, { backgroundColor: Colors[colorScheme].background }]}>
+      {colors.map((color, index) => (
+        <View
+          key={color.hex}
+          style={{
+            width: 48,
+            height: 48,
+            backgroundColor: `${color.hex}`,
+            borderTopLeftRadius: index === 0 ? 8 : 0,
+            borderBottomLeftRadius: index === 0 ? 8 : 0,
+            borderTopRightRadius: index === colors.length - 1 ? 8 : 0,
+            borderBottomRightRadius: index === colors.length - 1 ? 8 : 0
+          }}
+        />
+      ))}
+    </View>
+  )
+}
 
 const ColorPalette = () => {
   const [selectedPalette, setSelectedPalette] = useState(COLOR_PALETTES[0].id)
   const { colorPalette, error, isLoading } = useColorPalette(selectedPalette)
+  const colorScheme = useColorScheme() ?? 'light'
 
   const renderColorPalette = () => {
     return <PaletteColors colors={colorPalette?.colors || []} />
   }
 
   const changePalette = (paletteId: string) => {
-    console.log('change palette', paletteId)
     setSelectedPalette(paletteId)
   }
-
-  console.log('color palette', colorPalette)
 
   // if (error || isLoading) return null
 
   return (
     <View>
-      <Text style={styles.colorPaletteLabel}>Color Palettes</Text>
+      <Text style={[styles.colorPaletteLabel, { color: Colors[colorScheme].textLight }]}>
+        Color Palettes
+      </Text>
 
-      <View style={[styles.segmentedControl]}>
+      <View
+        style={[
+          styles.segmentedControl,
+          {
+            backgroundColor: Colors[colorScheme].backgroundLight,
+            borderColor: Colors[colorScheme].background
+          }
+        ]}
+      >
         {COLOR_PALETTES.map((palette, index) => (
           <Pressable
             key={palette.id}
             style={[
               styles.segment,
-              selectedPalette === palette.id && { backgroundColor: '#222222' },
+              selectedPalette === palette.id && { backgroundColor: Colors[colorScheme].text },
               index !== COLOR_PALETTES.length - 1 && {
                 borderRightWidth: 1,
-                borderRightColor: '#CCCCCC'
+                borderRightColor: Colors[colorScheme].background
               }
             ]}
             onPress={() => changePalette(palette.id)}
@@ -60,7 +73,15 @@ const ColorPalette = () => {
             <Text
               style={[
                 styles.segmentText,
-                selectedPalette === palette.id && { color: '#FFFFFF', fontFamily: 'Nunito-Black' }
+                selectedPalette === palette.id
+                  ? {
+                      color: Colors[colorScheme].backgroundLight,
+                      fontFamily: 'Nunito-Black'
+                    }
+                  : {
+                      color: Colors[colorScheme].textLight,
+                      fontFamily: 'Nunito-Regular'
+                    }
               ]}
             >
               {palette.title}
@@ -78,10 +99,8 @@ const styles = StyleSheet.create({
   segmentedControl: {
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#CCCCCC',
     alignSelf: 'flex-start',
     flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
     marginBottom: 10,
     borderRadius: 10,
     marginTop: 5
@@ -93,13 +112,11 @@ const styles = StyleSheet.create({
   },
   segmentText: {
     fontSize: 12,
-    fontFamily: 'Nunito-Regular',
-    color: '#999999'
+    fontFamily: 'Nunito-Regular'
   },
   colorPaletteLabel: {
     fontSize: 12,
-    fontFamily: 'Nunito-Light',
-    color: '#999999'
+    fontFamily: 'Nunito-Light'
   },
   colorPalette: {
     overflow: 'hidden',
@@ -109,7 +126,6 @@ const styles = StyleSheet.create({
     marginTop: 5,
     padding: 6,
     borderRadius: 12,
-    backgroundColor: '#FFFFFF',
     ...DEFAULT_SHADOW
   }
 })

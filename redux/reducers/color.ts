@@ -1,3 +1,4 @@
+import { MAXIMUM_FAVORITES_LENGTH, MAXIMUM_HISTORY_LENGTH } from '@/constants'
 import { Color } from '@/types'
 import { getColor } from '@/utils/colors'
 import { createSlice } from '@reduxjs/toolkit'
@@ -21,9 +22,13 @@ const colorReducer = createSlice({
       state.color.luminance = action.payload.luminance
     },
     addToHistory(state, action) {
+      if (state.history.length >= MAXIMUM_HISTORY_LENGTH) state.history.shift()
+
       state.history.push(action.payload)
     },
     addToFavorites(state, action) {
+      if (state.favorites.length >= MAXIMUM_FAVORITES_LENGTH) state.favorites.shift()
+
       state.favorites.push(action.payload)
     },
     removeFromFavorites(state, action) {
