@@ -1,11 +1,7 @@
-import {
-  Modal as RNModal,
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Animated
-} from 'react-native'
-import { ReactNode, useEffect, useRef, useMemo } from 'react'
+import { Modal as RNModal, StyleSheet, TouchableOpacity, Animated } from 'react-native'
+import { ReactNode, useEffect, useRef } from 'react'
+import { DEFAULT_SHADOW } from '@/constants'
+import { useSelector } from 'react-redux'
 
 type ModalProps = {
   visible: boolean
@@ -19,8 +15,8 @@ const Modal = ({ visible, onClose, children }: ModalProps) => {
   useEffect(() => {
     Animated.timing(backgroundOpacity, {
       toValue: visible ? 1 : 0,
-      duration: visible ? 700 : 0,
-      useNativeDriver: false // Changed to false since we're animating backgroundColor
+      duration: 700,
+      useNativeDriver: false
     }).start()
   }, [visible])
 
@@ -32,18 +28,9 @@ const Modal = ({ visible, onClose, children }: ModalProps) => {
   }
 
   return (
-    <RNModal
-      animationType="slide"
-      transparent={true}
-      visible={visible}
-      onRequestClose={onClose}
-    >
+    <RNModal animationType="slide" transparent={true} visible={visible} onRequestClose={onClose}>
       <Animated.View style={[styles.overlay, animatedStyle]}>
-        <TouchableOpacity
-          activeOpacity={1}
-          onPress={onClose}
-          style={styles.overlayTouchable}
-        >
+        <TouchableOpacity activeOpacity={1} onPress={onClose} style={styles.overlayTouchable}>
           <TouchableOpacity
             activeOpacity={1}
             onPress={(e) => e.stopPropagation()}
@@ -59,31 +46,20 @@ const Modal = ({ visible, onClose, children }: ModalProps) => {
 
 const styles = StyleSheet.create({
   overlay: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
+    flex: 1
   },
   overlayTouchable: {
     flex: 1,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: 'flex-end'
   },
   modalContent: {
+    width: '100%',
+    overflow: 'hidden',
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
     backgroundColor: '#FFFFFF',
-    borderRadius: 20,
-    padding: 20,
-    width: '70%',
-    minHeight: 300,
-    maxWidth: 500,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5
+    ...DEFAULT_SHADOW
   }
 })
 

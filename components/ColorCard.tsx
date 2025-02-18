@@ -10,7 +10,7 @@ import { getColor } from '@/utils/colors'
 import { DEFAULT_SHADOW } from '@/constants'
 import { useDispatch, useSelector } from 'react-redux'
 import { setColor, addToHistory, addToFavorites, removeFromFavorites } from '@/redux/reducers/color'
-import InfoModal from './InfoModal'
+import InfoModal from './ColorModal'
 
 const ColorCard = () => {
   const dispatch = useDispatch()
@@ -51,7 +51,9 @@ const ColorCard = () => {
         />
       </Pressable>
 
-      <InfoModal isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible} />
+      {isModalVisible && (
+        <InfoModal isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible} />
+      )}
     </View>
   )
 }

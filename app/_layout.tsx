@@ -1,11 +1,18 @@
 import { useEffect } from 'react'
+import { Provider } from 'react-redux'
+import { useColorScheme } from 'react-native'
 import { SplashScreen, Stack } from 'expo-router'
 import { useFonts } from 'expo-font'
 import { persistor, store } from '@/redux/store'
-import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
+import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
+const queryClient = new QueryClient()
 
 export default function RootLayout() {
+  const colorScheme = useColorScheme()
+
   const [loaded, error] = useFonts({
     'Nunito-Black': require('../assets/fonts/Nunito-Black.ttf'),
     'Nunito-Bold': require('../assets/fonts/Nunito-Bold.ttf'),
@@ -24,10 +31,14 @@ export default function RootLayout() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="index" options={{ title: 'Home' }} />
-          <Stack.Screen name="game" options={{ title: 'Game' }} />
-        </Stack>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="index" options={{ title: 'Home' }} />
+              <Stack.Screen name="game" options={{ title: 'Game' }} />
+            </Stack>
+          </ThemeProvider>
+        </QueryClientProvider>
       </PersistGate>
     </Provider>
   )

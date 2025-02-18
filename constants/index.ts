@@ -52,3 +52,26 @@ export const ACHIEVEMENTS = [
     icon: '🦄'
   }
 ]
+
+export const COLOR_PALETTES = [
+  {
+    id: 'monochrome',
+    title: 'Mono'
+  },
+  {
+    id: 'analogic',
+    title: 'Analog'
+  },
+  {
+    id: 'complement',
+    title: 'Compl'
+  },
+  {
+    id: 'triad',
+    title: 'Triad'
+  },
+  {
+    id: 'quad',
+    title: 'Tetrad'
+  }
+]

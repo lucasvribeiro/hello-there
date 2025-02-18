@@ -1,4 +1,4 @@
-import { Color, ColorData } from '@/types'
+import { Color, ColorData, ColorPalette } from '@/types'
 
 const getLuminance = (r: number, g: number, b: number) => {
   const normalizedColor = [r, g, b].map((color) => {
@@ -40,8 +40,22 @@ const mapColorData = (data: any): ColorData => {
     name: data.name.value,
     hex: data.hex.value,
     image: data.image.bare,
-    contrast: data.contrast.value
+    contrast: data.contrast.value,
+    rgb: [data.rgb.r, data.rgb.g, data.rgb.b],
+    hsl: [data.hsl.h, data.hsl.s, data.hsl.l],
+    cmyk: [data.cmyk.c, data.cmyk.m, data.cmyk.y, data.cmyk.k]
   } as ColorData
 }
 
-export { getLuminance, getHexColor, generateRandomValues, getColor, mapColorData }
+const mapColorPalette = (data: any): ColorPalette => {
+  return {
+    mode: data.mode,
+    count: Number(data.count),
+    colors: data.colors.map((color: any) => ({
+      hex: color.hex.value
+    })),
+    links: data._links.schemes
+  } as ColorPalette
+}
+
+export { getLuminance, getHexColor, generateRandomValues, getColor, mapColorData, mapColorPalette }

@@ -1,7 +1,6 @@
 export interface Color {
   hex: string
-  name?: string
-  luminance: number
+  luminance?: number
 }
 
 export interface ColorData {
@@ -9,6 +8,16 @@ export interface ColorData {
   hex: string
   image: string
   contrast: string
+  rgb: [number, number, number]
+  hsl: [number, number, number]
+  cmyk: [number, number, number, number]
+}
+
+export interface ColorPalette {
+  mode: string
+  count: number
+  colors: Color[]
+  links: object
 }
 
 export interface ColorContext {
@@ -18,6 +27,12 @@ export interface ColorContext {
 
 export interface ColorDataContext {
   colorData: ColorData | null
+  error: Error | null
+  isLoading: boolean
+}
+
+export interface ColorPaletteContext {
+  colorPalette: ColorPalette | null
   error: Error | null
   isLoading: boolean
 }

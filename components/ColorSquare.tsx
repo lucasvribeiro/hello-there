@@ -21,25 +21,28 @@ const ColorSquare = ({ color, onPress }: ColorSquareProps) => {
   }, [])
 
   return (
-    <Pressable onPress={onPress}>
-      <Animated.View
-        style={[
-          styles.square,
-          { transform: [{ scale: scaleValue }], backgroundColor: `#${color}` }
-        ]}
-      />
-    </Pressable>
+    <Animated.View style={{ transform: [{ scale: scaleValue }] }}>
+      <Pressable onPress={onPress} style={styles.pressable}>
+        <Animated.View style={[styles.square, { backgroundColor: `#${color}` }]} />
+      </Pressable>
+    </Animated.View>
   )
 }
 
 const styles = StyleSheet.create({
-  square: {
+  pressable: {
     width: 60,
     height: 60,
-    borderWidth: 6,
-    borderRadius: 15,
+    padding: 6,
+    borderRadius: 12,
     marginHorizontal: 4,
-    borderColor: '#FFFFFF',
+    backgroundColor: '#FFFFFF',
+    ...DEFAULT_SHADOW
+  },
+  square: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 10,
     ...DEFAULT_SHADOW
   }
 })
