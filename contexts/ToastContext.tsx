@@ -1,13 +1,15 @@
-import useToast, { ToastContextType } from '@/hooks/useToast'
 import { createContext, useContext } from 'react'
+
+import { ToastContext as ToastContextType } from '@/types'
+import useToast from '@/hooks/useToast'
 
 const ToastContext = createContext<ToastContextType | undefined>(undefined)
 
 const ToastProvider = ({ children }: { children: React.ReactNode }) => {
-  const { toast, setToast, showToast } = useToast()
+  const { toast, showToast, hideToast } = useToast()
 
   return (
-    <ToastContext.Provider value={{ toast, setToast, showToast }}>{children}</ToastContext.Provider>
+    <ToastContext.Provider value={{ toast, showToast, hideToast }}>{children}</ToastContext.Provider>
   )
 }
 

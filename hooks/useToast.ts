@@ -1,20 +1,9 @@
 import { useState } from 'react'
 
-export interface ToastType {
-  message: string
-  visible: boolean
-  time?: number
-  offset?: number
-}
+import { Toast, ToastContext } from '@/types'
 
-export interface ToastContextType {
-  toast: ToastType
-  setToast: (toast: ToastType) => void
-  showToast: (message: string, time?: number, offset?: number) => void
-}
-
-const useToast = (): ToastContextType => {
-  const [toast, setToast] = useState<ToastType>({ message: '', visible: false })
+const useToast = (): ToastContext => {
+  const [toast, setToast] = useState<Toast>({ message: '', visible: false })
 
   const showToast = (message: string, time?: number, offset?: number) => {
     if (!toast.visible) {
@@ -22,7 +11,11 @@ const useToast = (): ToastContextType => {
     }
   }
 
-  return { toast, setToast, showToast }
+  const hideToast = () => {
+    setToast({ message: '', visible: false })
+  }
+
+  return { toast, showToast, hideToast }
 }
 
 export default useToast

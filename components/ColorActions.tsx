@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Ionicons from '@expo/vector-icons/Ionicons'
 
 import { Color } from '@/types'
-import { Colors } from '@/constants/Colors'
+import { Colors } from '@/constants'
 
 import InfoModal from './ColorModal'
 import ActionButton from './ActionButton'

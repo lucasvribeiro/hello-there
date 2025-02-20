@@ -1,23 +1,26 @@
-import { ColorPaletteContext } from '@/types'
-import { fetchColorPalette } from '@/api/colorService'
-import { useQuery } from '@tanstack/react-query'
 import { useSelector } from 'react-redux'
+import { useQuery } from '@tanstack/react-query'
 
-const useColorPalette = (paletteType: string = 'monochrome'): ColorPaletteContext => {
+import { ColorPaletteQuery } from '@/types'
+import { fetchColorPalette } from '@/api/colorService'
+import { ColorPalettes, TIMING } from '@/constants'
+
+const DEFAULT_PALETTE_TYPE = ColorPalettes[0].value
+
+const useColorPalette = (paletteType: string = DEFAULT_PALETTE_TYPE): ColorPaletteQuery => {
   const color = useSelector((state: any) => state.color.color)
 
-  const { data, error, isLoading } = useQuery({
-    queryKey: ['colorPalette', color?.hex, paletteType],
-    queryFn: async () => {
-      const palette = await fetchColorPalette(color?.hex || '', paletteType)
-      return palette
-    },
-    enabled: !!color?.hex,
-    staleTime: 60000 * 5, // 5 minutes
-    gcTime: 60000 * 10 // 10 minutes
+  const { data, isError, isLoading } = useQuery({
+    queryKey: ['colorPalette', color.hex, paletteType],
+    queryFn: () => fetchColorPalette(color.hex, paletteType),
+    enabled: !!color.hex,
+    staleTime: TIMING.FIVE_MINUTES,
+    gcTime: TIMING.TEN_MINUTES,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false
   })
 
-  return { colorPalette: data || null, error, isLoading }
+  return { colorPalette: data, isError, isLoading }
 }
 
 export default useColorPalette

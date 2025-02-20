@@ -12,8 +12,8 @@ const persistConfig = {
 }
 
 const rootReducer = combineReducers({
-  color: colorReducer,
-  user: userReducer
+  user: userReducer,
+  color: colorReducer
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
@@ -25,6 +25,8 @@ const store = configureStore({
 
 const persistor = persistStore(store)
 
-// persistor.purge()
+if (__DEV__) {
+  persistor.purge()
+}
 
 export { store, persistor }

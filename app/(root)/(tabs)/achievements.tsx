@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import ScreenWrapper from '@/components/ScreenWrapper'
 import Achievement from '@/components/Achievement'
 import { useSelector } from 'react-redux'
@@ -6,6 +6,7 @@ import { Achievement as AchievementType } from '@/types'
 
 const Achievements = () => {
   const achievements = useSelector((state: any) => state.user.achievements)
+
   return (
     <ScreenWrapper title="Achievements">
       <View style={styles.achievementsContainer}>

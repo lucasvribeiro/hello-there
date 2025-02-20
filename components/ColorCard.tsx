@@ -6,8 +6,8 @@ import * as Haptics from 'expo-haptics'
 
 import { Color } from '@/types'
 import useTheme from '@/hooks/useTheme'
-import { getColor } from '@/utils/colors'
-import { Colors } from '@/constants/Colors'
+import { getColor } from '@/utils/colorUtils'
+import { Colors } from '@/constants'
 import { DEFAULT_SHADOW } from '@/constants'
 import { addToFavorites, setColor } from '@/redux/reducers/color'
 import ActionButton from './ActionButton'
@@ -17,7 +17,7 @@ import { useToastContext } from '@/contexts/ToastContext'
 const ColorCard = () => {
   const dispatch = useDispatch()
   const { showToast } = useToastContext()
-  const { theme } = useTheme()
+  const theme = useTheme()
 
   const history = useSelector((state: any) => state.color.history)
   const color: Color = useSelector((state: any) => state.color.color)

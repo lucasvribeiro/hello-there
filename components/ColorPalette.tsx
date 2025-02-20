@@ -1,12 +1,13 @@
 import { View, Text, StyleSheet, Pressable } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import useColorPalette from '@/hooks/useColorPalette'
-import { DEFAULT_SHADOW, COLOR_PALETTES } from '@/constants'
-import { Colors } from '@/constants/Colors'
+import { DEFAULT_SHADOW, ColorPalettes } from '@/constants'
+import { Colors } from '@/constants'
 import useTheme from '@/hooks/useTheme'
+import SegmentedControl from './SegmentedControl'
 
 const PaletteColors = ({ colors }: { colors: Array<{ hex: string }> }) => {
-  const { theme } = useTheme()
+  const theme = useTheme()
 
   return (
     <View style={[styles.colorPalette, { backgroundColor: Colors[theme].background }]}>
@@ -29,19 +30,13 @@ const PaletteColors = ({ colors }: { colors: Array<{ hex: string }> }) => {
 }
 
 const ColorPalette = () => {
-  const [selectedPalette, setSelectedPalette] = useState(COLOR_PALETTES[0].id)
-  const { colorPalette, error, isLoading } = useColorPalette(selectedPalette)
-  const { theme } = useTheme()
-
-  const renderColorPalette = () => {
-    return <PaletteColors colors={colorPalette?.colors || []} />
-  }
+  const theme = useTheme()
+  const [selectedPalette, setSelectedPalette] = useState(ColorPalettes[0].value)
+  const { colorPalette, isError, isLoading } = useColorPalette(selectedPalette)
 
   const changePalette = (paletteId: string) => {
-    setSelectedPalette(paletteId)
+    setSelectedPalette(paletteId as typeof selectedPalette)
   }
-
-  // if (error || isLoading) return null
 
   return (
     <View>
@@ -49,84 +44,26 @@ const ColorPalette = () => {
         Color Palettes
       </Text>
 
-      <View
-        style={[
-          styles.segmentedControl,
-          {
-            backgroundColor: Colors[theme].backgroundLight,
-            borderColor: Colors[theme].background
-          }
-        ]}
-      >
-        {COLOR_PALETTES.map((palette, index) => (
-          <Pressable
-            key={palette.id}
-            style={[
-              styles.segment,
-              selectedPalette === palette.id && { backgroundColor: Colors[theme].text },
-              index !== COLOR_PALETTES.length - 1 && {
-                borderRightWidth: 1,
-                borderRightColor: Colors[theme].background
-              }
-            ]}
-            onPress={() => changePalette(palette.id)}
-          >
-            <Text
-              style={[
-                styles.segmentText,
-                selectedPalette === palette.id
-                  ? {
-                      color: Colors[theme].backgroundLight,
-                      fontFamily: 'Nunito-Black'
-                    }
-                  : {
-                      color: Colors[theme].textLight,
-                      fontFamily: 'Nunito-Regular'
-                    }
-              ]}
-            >
-              {palette.title}
-            </Text>
-          </Pressable>
-        ))}
-      </View>
+      <SegmentedControl data={ColorPalettes} selected={selectedPalette} onChange={changePalette} />
 
-      {renderColorPalette()}
+      {colorPalette && <PaletteColors colors={colorPalette.colors} />}
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  segmentedControl: {
-    overflow: 'hidden',
-    borderWidth: 1,
-    alignSelf: 'flex-start',
-    flexDirection: 'row',
-    marginBottom: 10,
-    borderRadius: 10,
-    marginTop: 5
-    // ...DEFAULT_SHADOW
-  },
-  segment: {
-    paddingVertical: 6,
-    paddingHorizontal: 12
-  },
-  segmentText: {
-    fontSize: 12,
-    fontFamily: 'Nunito-Regular'
-  },
   colorPaletteLabel: {
     fontSize: 12,
     fontFamily: 'Nunito-Light'
   },
   colorPalette: {
-    overflow: 'hidden',
-    alignSelf: 'flex-start',
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    marginTop: 5,
     padding: 6,
+    marginTop: 5,
     borderRadius: 12,
+    overflow: 'hidden',
+    flexDirection: 'row',
+    alignSelf: 'flex-start',
+    justifyContent: 'flex-start',
     ...DEFAULT_SHADOW
   }
 })

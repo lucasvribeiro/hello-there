@@ -13,7 +13,7 @@ import { ColorData } from '@/types'
 import { useState } from 'react'
 import ColorPalette from './ColorPalette'
 import Loading from './Loading'
-import { Colors } from '@/constants/Colors'
+import { Colors } from '@/constants'
 import useTheme from '@/hooks/useTheme'
 interface InfoModalProps {
   isModalVisible: boolean
@@ -22,9 +22,9 @@ interface InfoModalProps {
 
 const InfoModal = ({ isModalVisible, setIsModalVisible }: InfoModalProps) => {
   const color = useSelector((state: any) => state.color.color)
-  const { colorData, error, isLoading } = useColorData()
+  const { colorData, isError, isLoading } = useColorData()
 
-  if (error) return null
+  if (isError) return null
 
   return (
     <Modal visible={isModalVisible} onClose={() => setIsModalVisible(false)}>
@@ -77,7 +77,7 @@ const ColorCode = ({
   value: string | Array<number> | undefined
 }) => {
   const color = useSelector((state: any) => state.color.color)
-  const { theme } = useTheme()
+  const theme = useTheme()
   const valueString = Array.isArray(value) ? value.join(', ') : value
   const [scale] = useState(new Animated.Value(1))
 

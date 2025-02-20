@@ -1,21 +1,20 @@
 import { View, Text } from 'react-native'
-import RNPickerSelect from 'react-native-picker-select'
+import { useDispatch, useSelector } from 'react-redux'
 
-import ScreenWrapper from '@/components/ScreenWrapper'
-import { useSelector } from 'react-redux'
-import { useState } from 'react'
 import useTheme from '@/hooks/useTheme'
-import { Theme } from '@/types'
-import { Colors } from '@/constants/Colors'
+import { Colors, THEMES } from '@/constants'
+import { Theme, ThemePreference } from '@/types'
+import { setTheme } from '@/redux/reducers/user'
+import ScreenWrapper from '@/components/ScreenWrapper'
+import SegmentedControl from '@/components/SegmentedControl'
 
 const Settings = () => {
-  const { theme, setTheme } = useTheme()
+  const dispatch = useDispatch()
+  const theme: Theme = useTheme()
+  const themePreference: ThemePreference = useSelector((state: any) => state.user.preferences.theme)
 
-  const [selectedTheme, setSelectedTheme] = useState(theme as Theme)
-
-  const handleThemeChange = (value: string) => {
-    setSelectedTheme(value as Theme)
-    setTheme(value as Theme)
+  const changeTheme = (value: string) => {
+    dispatch(setTheme({ theme: value as Theme }))
   }
 
   return (
@@ -24,16 +23,8 @@ const Settings = () => {
         <Text style={{ color: Colors[theme].text, fontSize: 16, fontFamily: 'Nunito-Bold' }}>
           Theme
         </Text>
-        <RNPickerSelect
-          value={selectedTheme}
-          placeholder={{}}
-          onValueChange={handleThemeChange}
-          items={[
-            { label: 'Device', value: 'device' },
-            { label: 'Light', value: 'light' },
-            { label: 'Dark', value: 'dark' }
-          ]}
-        />
+
+        <SegmentedControl data={THEMES} selected={themePreference} onChange={changeTheme} />
       </View>
     </ScreenWrapper>
   )

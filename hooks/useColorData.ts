@@ -1,20 +1,24 @@
-import { ColorDataContext } from '@/types'
-import { fetchColorData } from '@/api/colorService'
-import { useQuery } from '@tanstack/react-query'
 import { useSelector } from 'react-redux'
+import { useQuery } from '@tanstack/react-query'
 
-const useColorData = (): ColorDataContext => {
+import { ColorDataQuery } from '@/types'
+import { TIMING } from '@/constants'
+import { fetchColorData } from '@/api/colorService'
+
+const useColorData = (): ColorDataQuery => {
   const color = useSelector((state: any) => state.color.color)
 
-  const { data, error, isLoading } = useQuery({
-    queryKey: ['colorData', color?.hex],
-    queryFn: () => fetchColorData(color?.hex || ''),
-    enabled: !!color?.hex,
-    staleTime: 60000 * 5, // 5 minutes
-    gcTime: 60000 * 10 // 10 minutes
+  const { data, isError, isLoading } = useQuery({
+    queryKey: ['colorData', color.hex],
+    queryFn: () => fetchColorData(color.hex),
+    enabled: !!color.hex,
+    staleTime: TIMING.FIVE_MINUTES,
+    gcTime: TIMING.TEN_MINUTES,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false
   })
 
-  return { colorData: data || null, error, isLoading }
+  return { colorData: data, isError, isLoading }
 }
 
 export default useColorData

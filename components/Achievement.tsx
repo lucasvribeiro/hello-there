@@ -3,15 +3,15 @@ import React from 'react'
 import { Achievement as AchievementType } from '@/types'
 import { DEFAULT_SHADOW } from '@/constants'
 import useTheme from '@/hooks/useTheme'
-import { Colors } from '@/constants/Colors'
+import { Colors } from '@/constants'
 
 const Achievement = ({ achievement }: { achievement: AchievementType }) => {
-  const { theme } = useTheme()
+  const theme = useTheme()
 
   return (
     <View style={[styles.achievementContainer, { backgroundColor: Colors[theme].background }]}>
       {!achievement.unlocked && (
-        <View style={[styles.overlay, { backgroundColor: `${Colors[theme].backgroundLight}CC` }]} />
+        <View style={[styles.overlay, { backgroundColor: `${Colors[theme].backgroundLight}DD` }]} />
       )}
 
       <View style={[styles.achievementContent, { backgroundColor: Colors[theme].text }]}>

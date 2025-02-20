@@ -1,10 +1,10 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
 import useTheme from '@/hooks/useTheme'
-import { Colors } from '@/constants/Colors'
+import { Colors } from '@/constants'
 
 const Empty = () => {
-  const { theme } = useTheme()
+  const theme = useTheme()
 
   return (
     <View>

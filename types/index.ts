@@ -1,10 +1,8 @@
 export interface Color {
   hex: string
   contrast: 'light' | 'dark'
-  luminance?: number
+  luminance: number
 }
-
-export type Theme = 'device' | 'light' | 'dark'
 
 export interface ColorData {
   name: string
@@ -16,12 +14,16 @@ export interface ColorData {
   cmyk: [number, number, number, number]
 }
 
-export interface Achievement {
-  id: number
-  trigger: number
-  title: string
-  icon: string
-  unlocked?: boolean
+export interface ColorDataQuery {
+  colorData: ColorData | null | undefined
+  isError: boolean
+  isLoading: boolean
+}
+
+export interface ColorPaletteQuery {
+  colorPalette: ColorPalette | null | undefined
+  isError: boolean
+  isLoading: boolean
 }
 
 export interface ColorPalette {
@@ -31,19 +33,44 @@ export interface ColorPalette {
   links: object
 }
 
-export interface ColorContext {
-  color: Color | null
-  setColor: (color: Color) => void
+export interface Achievement {
+  id: number
+  icon: string
+  title: string
+  trigger: number
+  unlocked?: boolean
 }
 
-export interface ColorDataContext {
-  colorData: ColorData | null
-  error: Error | null
-  isLoading: boolean
+export interface Toast {
+  message: string
+  visible: boolean
+  time?: number
+  offset?: number
 }
 
-export interface ColorPaletteContext {
-  colorPalette: ColorPalette | null
-  error: Error | null
-  isLoading: boolean
+export interface ToastContext {
+  toast: Toast
+  hideToast: () => void
+  showToast: (message: string, time?: number, offset?: number) => void
 }
+
+export type History = Color[]
+
+export type Favorites = Color[]
+
+export type Theme = 'light' | 'dark'
+
+export type ThemePreference = 'device' | Theme
+export interface UserState {
+  achievements: Achievement[]
+  preferences: { theme: ThemePreference }
+}
+
+export interface ColorState {
+  color: Color
+  history: History
+  favorites: Favorites
+  currentIndex: number
+}
+
+export type HistoryAction = 'new' | 'prev' | 'next'

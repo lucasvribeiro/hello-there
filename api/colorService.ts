@@ -1,9 +1,6 @@
+import { API_CONFIG } from '@/constants'
 import { ColorData, ColorPalette } from '@/types'
-import { mapColorData, mapColorPalette } from '@/utils/colors'
-
-const API_BASE_URL = 'https://www.thecolorapi.com/'
-const COLOR_DATA_PATH = 'id?format=json&hex='
-const COLOR_PALETTE_PATH = 'scheme?format=json&count=6&hex='
+import { mapColorData, mapColorPalette } from '@/utils/colorUtils'
 
 class ColorApiError extends Error {
   constructor(message: string, public statusCode?: number) {
@@ -12,19 +9,15 @@ class ColorApiError extends Error {
   }
 }
 
-let currentAbortController: AbortController | null = null
-let currentAbortControllerPalette: AbortController | null = null
-
-export const fetchColorData = async (hex: string): Promise<ColorData | null> => {
-  currentAbortController?.abort()
-  currentAbortController = new AbortController()
-
+const fetchColorApi = async <T>(
+  url: string,
+  abortController: AbortController,
+  mapper: (data: any) => T
+): Promise<T | null> => {
   try {
-    const response: Response = await fetch(`${API_BASE_URL}${COLOR_DATA_PATH}${hex}`, {
-      signal: currentAbortController.signal,
-      headers: {
-        Accept: 'application/json'
-      }
+    const response = await fetch(url, {
+      signal: abortController.signal,
+      headers: { Accept: 'application/json' }
     })
 
     if (!response.ok) {
@@ -32,65 +25,42 @@ export const fetchColorData = async (hex: string): Promise<ColorData | null> => 
     }
 
     const data = await response.json()
-
     if (!data) {
       throw new ColorApiError('No color data was found in the response')
     }
 
-    return mapColorData(data)
+    return mapper(data)
   } catch (error: any) {
-    if (error instanceof ColorApiError) {
-      console.error('[ERROR] fetchColorData:', error)
-      return null
-    }
-
-    if (error.name === 'AbortError') {
-      console.log('[ERROR] fetchColorData: Request was aborted')
-      return null
-    }
-
-    console.error('[ERROR] fetchColorData:', error)
+    if (error instanceof ColorApiError) console.error('[ERROR] Color API:', error)
+    
+    else if (error.name === 'AbortError') console.log('[ERROR] Color API: Request was aborted')
+    
+    else console.error('[ERROR] Color API:', error)
+    
     return null
   }
 }
 
-export const fetchColorPalette = async (hex: string, paletteType: string): Promise<ColorPalette | null> => {
-  currentAbortControllerPalette?.abort()
-  currentAbortControllerPalette = new AbortController()
+const controllers = {
+  colorData: null as AbortController | null,
+  colorPalette: null as AbortController | null
+}
 
-  try {
-    const response: Response = await fetch(
-      `${API_BASE_URL}${COLOR_PALETTE_PATH}${hex}&mode=${paletteType}`,
-      {
-        signal: currentAbortControllerPalette.signal,
-        headers: {
-          Accept: 'application/json'
-      }
-    })
+export const fetchColorData = async (hex: string): Promise<ColorData | null> => {
+  controllers.colorData?.abort()
+  controllers.colorData = new AbortController()
 
-    if (!response.ok) {
-      throw new ColorApiError(`Error fetching color: ${response.statusText}`, response.status)
-    }
+  const url = `${API_CONFIG.BASE_URL}${API_CONFIG.COLOR_DATA_PATH}${hex}`
+  return fetchColorApi<ColorData>(url, controllers.colorData, mapColorData)
+}
 
-    const data = await response.json()
+export const fetchColorPalette = async (
+  hex: string,
+  paletteType: string
+): Promise<ColorPalette | null> => {
+  controllers.colorPalette?.abort()
+  controllers.colorPalette = new AbortController()
 
-    if (!data) {
-      throw new ColorApiError('No color data was found in the response')
-    }
-
-    return mapColorPalette(data)
-  } catch (error: any) {
-    if (error instanceof ColorApiError) {
-      console.error('[ERROR] fetchColorPalette:', error)
-      return null
-    }
-
-    if (error.name === 'AbortError') {
-      console.log('[ERROR] fetchColorPalette: Request was aborted')
-      return null
-    }
-
-    console.error('[ERROR] fetchColorPalette:', error)
-    return null
-  }
+  const url = `${API_CONFIG.BASE_URL}${API_CONFIG.COLOR_PALETTE_PATH}${hex}&mode=${paletteType}`
+  return fetchColorApi<ColorPalette>(url, controllers.colorPalette, mapColorPalette)
 }

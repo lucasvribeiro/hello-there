@@ -1,19 +1,17 @@
-import React from 'react'
 import { Slot } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
+import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
+
 import Toast from '@/components/Toast'
-import { DarkTheme } from '@react-navigation/native'
-import { ThemeProvider } from '@react-navigation/native'
-import { DefaultTheme } from '@react-navigation/native'
 import useTheme from '@/hooks/useTheme'
 
 const AppLayout = () => {
-  const { theme } = useTheme()
+  const theme = useTheme()
 
   return (
     <ThemeProvider value={theme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Toast />
       <StatusBar style="light" />
+      <Toast />
       <Slot />
     </ThemeProvider>
   )

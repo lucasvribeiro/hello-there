@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import { StyleSheet, Animated, Pressable } from 'react-native'
 
 import { DEFAULT_SHADOW } from '@/constants'
-import { Colors } from '@/constants/Colors'
+import { Colors } from '@/constants'
 import useTheme from '@/hooks/useTheme'
 
 type ColorSquareProps = {
@@ -22,7 +22,7 @@ const ColorSquare = ({
   padding = 6,
   withBorder = false
 }: ColorSquareProps) => {
-  const { theme } = useTheme()
+  const theme = useTheme()
   const scaleValue = useRef(new Animated.Value(0)).current
 
   const animate = () => {

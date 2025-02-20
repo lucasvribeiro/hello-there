@@ -2,7 +2,7 @@ import { Modal as RNModal, StyleSheet, TouchableOpacity, Animated } from 'react-
 import { ReactNode, useEffect, useRef } from 'react'
 import { DEFAULT_SHADOW } from '@/constants'
 import { useSelector } from 'react-redux'
-import { Colors } from '@/constants/Colors'
+import { Colors } from '@/constants'
 import useTheme from '@/hooks/useTheme'
 type ModalProps = {
   visible: boolean
@@ -11,7 +11,7 @@ type ModalProps = {
 }
 
 const Modal = ({ visible, onClose, children }: ModalProps) => {
-  const { theme } = useTheme()
+  const theme = useTheme()
   const backgroundOpacity = useRef(new Animated.Value(0)).current
 
   useEffect(() => {

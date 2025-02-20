@@ -1,13 +1,13 @@
 import { DEFAULT_SHADOW } from '@/constants'
-import { Colors } from '@/constants/Colors'
+import { Colors } from '@/constants'
 import { useToastContext } from '@/contexts/ToastContext'
 import { useEffect, useRef } from 'react'
 import { StyleSheet, Animated, Text } from 'react-native'
 import useTheme from '@/hooks/useTheme'
 
 const Toast = () => {
-  const { toast, setToast } = useToastContext()
-  const { theme } = useTheme()
+  const theme = useTheme()
+  const { toast, hideToast } = useToastContext()
   const { message, visible, time, offset } = toast
 
   const translateY = useRef(new Animated.Value(-100)).current
@@ -28,7 +28,7 @@ const Toast = () => {
           useNativeDriver: true
         })
       ]).start(() => {
-        setToast({ message: '', visible: false })
+        hideToast()
       })
     }
   }, [visible])

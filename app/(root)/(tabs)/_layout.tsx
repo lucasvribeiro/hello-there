@@ -1,12 +1,12 @@
 import { Tabs } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { useSelector } from 'react-redux'
-import { Colors } from '@/constants/Colors'
+import { Colors } from '@/constants'
 import useTheme from '@/hooks/useTheme'
 
 const TabLayout = () => {
+  const theme = useTheme()
   const favorites = useSelector((state: any) => state.color.favorites)
-  const { theme } = useTheme()
 
   return (
     <Tabs
@@ -62,7 +62,7 @@ const TabLayout = () => {
         options={{
           title: 'History',
           tabBarIcon: ({ focused, color }) => (
-            <Ionicons name={focused ? 'play-back' : 'play-back-outline'} color={color} size={24} />
+            <Ionicons name={focused ? 'apps' : 'apps-outline'} color={color} size={24} />
           )
         }}
       />
