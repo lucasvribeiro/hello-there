@@ -11,6 +11,7 @@ const Loading = () => {
 
 const styles = StyleSheet.create({
   loadingContainer: {
+    height: '100%',
     top: 0,
     left: 0,
     right: 0,
@@ -19,7 +20,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#222222EE'
+    backgroundColor: '#22222244'
   }
 })
 

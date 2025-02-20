@@ -29,10 +29,11 @@ const generateRandomValues = (): [number, number, number] => {
 
 const getColor = (): Color => {
   const [r, g, b] = generateRandomValues()
-  const hexColor = getHexColor(r, g, b)
-  const colorLuminance = getLuminance(r, g, b)
+  const hex = getHexColor(r, g, b)
+  const luminance = getLuminance(r, g, b)
+  const contrast = luminance < 0.179 ? 'light' : 'dark'
 
-  return { hex: hexColor, luminance: colorLuminance }
+  return { hex, contrast, luminance }
 }
 
 const mapColorData = (data: any): ColorData => {

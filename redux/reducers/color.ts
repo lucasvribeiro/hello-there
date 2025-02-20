@@ -6,11 +6,13 @@ import { createSlice } from '@reduxjs/toolkit'
 const color: Color = getColor()
 const history: Color[] = [color]
 const favorites: Color[] = []
+const currentIndex = 0
 
 const initialState = {
   color,
   history,
-  favorites
+  favorites,
+  currentIndex
 }
 
 const colorReducer = createSlice({
@@ -18,14 +20,22 @@ const colorReducer = createSlice({
   initialState,
   reducers: {
     setColor(state, action) {
-      state.color.hex = action.payload.hex
-      state.color.luminance = action.payload.luminance
-    },
-    addToHistory(state, action) {
-      if (state.history.length >= MAXIMUM_HISTORY_LENGTH) state.history.shift()
+      const { type, ...newColor } = action.payload
+      state.color = newColor
 
-      state.history.push(action.payload)
+      if (type === 'new') {
+        if (state.history.length >= MAXIMUM_HISTORY_LENGTH) state.history.shift()
+        state.history.push(action.payload)
+        state.currentIndex = state.history.length - 1
+      } else if (type === 'prev') {
+        state.currentIndex = state.currentIndex - 1
+      } else if (type === 'next') {
+        state.currentIndex = state.currentIndex + 1
+      } else if (type === 'index') {
+        state.currentIndex = action.payload.index
+      }
     },
+
     addToFavorites(state, action) {
       if (state.favorites.length >= MAXIMUM_FAVORITES_LENGTH) state.favorites.shift()
 
@@ -39,17 +49,20 @@ const colorReducer = createSlice({
     },
     clearFavorites(state) {
       state.favorites = []
+    },
+    setCurrentIndex(state, action) {
+      state.currentIndex = action.payload
     }
   }
 })
 
 export const {
   setColor,
-  addToHistory,
   clearHistory,
   addToFavorites,
   removeFromFavorites,
-  clearFavorites
+  clearFavorites,
+  setCurrentIndex
 } = colorReducer.actions
 
 export default colorReducer.reducer

@@ -1,7 +1,10 @@
 export interface Color {
   hex: string
+  contrast: 'light' | 'dark'
   luminance?: number
 }
+
+export type Theme = 'device' | 'light' | 'dark'
 
 export interface ColorData {
   name: string
@@ -11,6 +14,14 @@ export interface ColorData {
   rgb: [number, number, number]
   hsl: [number, number, number]
   cmyk: [number, number, number, number]
+}
+
+export interface Achievement {
+  id: number
+  trigger: number
+  title: string
+  icon: string
+  unlocked?: boolean
 }
 
 export interface ColorPalette {

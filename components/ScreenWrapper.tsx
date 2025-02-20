@@ -1,5 +1,6 @@
 import { Colors } from '@/constants/Colors'
-import { StyleSheet, View, Text, ScrollView, useColorScheme } from 'react-native'
+import useTheme from '@/hooks/useTheme'
+import { StyleSheet, View, Text, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 interface ScreenWrapperProps {
@@ -10,15 +11,15 @@ interface ScreenWrapperProps {
 }
 
 const ScreenWrapper = ({ title, children, scrollable = false }: ScreenWrapperProps) => {
-  const colorScheme = useColorScheme() ?? 'light'
+  const { theme } = useTheme()
 
   return (
     <SafeAreaView
-      style={[styles.safeContainer, { backgroundColor: Colors[colorScheme].backgroundLight }]}
+      style={[styles.safeContainer, { backgroundColor: Colors[theme].backgroundLight }]}
     >
       {title && (
         <View style={styles.header}>
-          <Text style={[styles.title, { color: Colors[colorScheme].text }]}>{title}</Text>
+          <Text style={[styles.title, { color: Colors[theme].text }]}>{title}</Text>
         </View>
       )}
 

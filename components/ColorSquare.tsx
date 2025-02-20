@@ -1,29 +1,49 @@
-import React, { useEffect, useState } from 'react'
-import { StyleSheet, Animated, Pressable, useColorScheme } from 'react-native'
+import React, { useEffect, useRef } from 'react'
+import { StyleSheet, Animated, Pressable } from 'react-native'
 
 import { DEFAULT_SHADOW } from '@/constants'
 import { Colors } from '@/constants/Colors'
+import useTheme from '@/hooks/useTheme'
 
 type ColorSquareProps = {
-  size?: number
+  width?: number
+  height?: number
   padding?: number
   color: string
-  onPress: () => void
+  onPress?: () => void
   withBorder?: boolean
 }
 
-const ColorSquare = ({ color, onPress, size = 60, padding = 6, withBorder = false }: ColorSquareProps) => {
-  const colorScheme = useColorScheme() ?? 'light'
-  const scaleValue = useState(new Animated.Value(0))[0]
+const ColorSquare = ({
+  color,
+  onPress,
+  width = 60,
+  height = 60,
+  padding = 6,
+  withBorder = false
+}: ColorSquareProps) => {
+  const { theme } = useTheme()
+  const scaleValue = useRef(new Animated.Value(0)).current
 
-  useEffect(() => {
+  const animate = () => {
     Animated.spring(scaleValue, {
       toValue: 1,
       tension: 100,
       friction: 7,
       useNativeDriver: true
     }).start()
+  }
+
+  useEffect(() => {
+    animate()
   }, [])
+
+  useEffect(() => {
+    if (withBorder) {
+      scaleValue.setValue(0.8)
+      animate()
+    }
+  }, [withBorder])
 
   return (
     <Animated.View style={{ transform: [{ scale: scaleValue }] }}>
@@ -32,12 +52,12 @@ const ColorSquare = ({ color, onPress, size = 60, padding = 6, withBorder = fals
         style={[
           styles.pressable,
           {
-            width: size,
-            height: size,
+            width,
+            height,
             padding,
-            backgroundColor: Colors[colorScheme].background,
+            backgroundColor: Colors[theme].background,
             borderWidth: withBorder ? 1 : 0,
-            borderColor: Colors[colorScheme].textLight
+            borderColor: Colors[theme].textLight
           }
         ]}
       >

@@ -1,14 +1,15 @@
-import { View, Text, StyleSheet, Pressable, useColorScheme } from 'react-native'
+import { View, Text, StyleSheet, Pressable } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import useColorPalette from '@/hooks/useColorPalette'
 import { DEFAULT_SHADOW, COLOR_PALETTES } from '@/constants'
 import { Colors } from '@/constants/Colors'
+import useTheme from '@/hooks/useTheme'
 
 const PaletteColors = ({ colors }: { colors: Array<{ hex: string }> }) => {
-  const colorScheme = useColorScheme() ?? 'light'
+  const { theme } = useTheme()
 
   return (
-    <View style={[styles.colorPalette, { backgroundColor: Colors[colorScheme].background }]}>
+    <View style={[styles.colorPalette, { backgroundColor: Colors[theme].background }]}>
       {colors.map((color, index) => (
         <View
           key={color.hex}
@@ -30,7 +31,7 @@ const PaletteColors = ({ colors }: { colors: Array<{ hex: string }> }) => {
 const ColorPalette = () => {
   const [selectedPalette, setSelectedPalette] = useState(COLOR_PALETTES[0].id)
   const { colorPalette, error, isLoading } = useColorPalette(selectedPalette)
-  const colorScheme = useColorScheme() ?? 'light'
+  const { theme } = useTheme()
 
   const renderColorPalette = () => {
     return <PaletteColors colors={colorPalette?.colors || []} />
@@ -44,7 +45,7 @@ const ColorPalette = () => {
 
   return (
     <View>
-      <Text style={[styles.colorPaletteLabel, { color: Colors[colorScheme].textLight }]}>
+      <Text style={[styles.colorPaletteLabel, { color: Colors[theme].textLight }]}>
         Color Palettes
       </Text>
 
@@ -52,8 +53,8 @@ const ColorPalette = () => {
         style={[
           styles.segmentedControl,
           {
-            backgroundColor: Colors[colorScheme].backgroundLight,
-            borderColor: Colors[colorScheme].background
+            backgroundColor: Colors[theme].backgroundLight,
+            borderColor: Colors[theme].background
           }
         ]}
       >
@@ -62,10 +63,10 @@ const ColorPalette = () => {
             key={palette.id}
             style={[
               styles.segment,
-              selectedPalette === palette.id && { backgroundColor: Colors[colorScheme].text },
+              selectedPalette === palette.id && { backgroundColor: Colors[theme].text },
               index !== COLOR_PALETTES.length - 1 && {
                 borderRightWidth: 1,
-                borderRightColor: Colors[colorScheme].background
+                borderRightColor: Colors[theme].background
               }
             ]}
             onPress={() => changePalette(palette.id)}
@@ -75,11 +76,11 @@ const ColorPalette = () => {
                 styles.segmentText,
                 selectedPalette === palette.id
                   ? {
-                      color: Colors[colorScheme].backgroundLight,
+                      color: Colors[theme].backgroundLight,
                       fontFamily: 'Nunito-Black'
                     }
                   : {
-                      color: Colors[colorScheme].textLight,
+                      color: Colors[theme].textLight,
                       fontFamily: 'Nunito-Regular'
                     }
               ]}

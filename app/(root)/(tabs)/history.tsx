@@ -7,27 +7,17 @@ import { removeFromFavorites } from '@/redux/reducers/color'
 import ScreenWrapper from '@/components/ScreenWrapper'
 import Empty from '@/components/Empty'
 
-const Favorites = () => {
+const History = () => {
   const dispatch = useDispatch()
-  const favorites = useSelector((state: any) => state.color.favorites)
-
-  const handlePress = (color: Color) => {
-    dispatch(removeFromFavorites(color))
-  }
+  const history = useSelector((state: any) => state.color.history)
 
   return (
-    <ScreenWrapper title="Favorites" scrollable>
-      {favorites.length > 0 ? (
+    <ScreenWrapper title="History" scrollable>
+      {history.length > 0 ? (
         <View style={styles.colorsContainer}>
-          {favorites.map((item: Color) => (
+          {history.map((item: Color) => (
             <View key={item.hex} style={{ padding: 5 }}>
-              <ColorSquare
-                width={72}
-                height={72}
-                padding={6}
-                color={item.hex}
-                onPress={() => handlePress(item)}
-              />
+              <ColorSquare width={72} height={72} padding={6} color={item.hex} />
             </View>
           ))}
         </View>
@@ -62,4 +52,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Favorites
+export default History

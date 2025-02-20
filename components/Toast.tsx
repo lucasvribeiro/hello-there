@@ -2,11 +2,12 @@ import { DEFAULT_SHADOW } from '@/constants'
 import { Colors } from '@/constants/Colors'
 import { useToastContext } from '@/contexts/ToastContext'
 import { useEffect, useRef } from 'react'
-import { StyleSheet, Animated, Text, useColorScheme } from 'react-native'
+import { StyleSheet, Animated, Text } from 'react-native'
+import useTheme from '@/hooks/useTheme'
 
 const Toast = () => {
   const { toast, setToast } = useToastContext()
-  const colorScheme = useColorScheme() ?? 'light'
+  const { theme } = useTheme()
   const { message, visible, time, offset } = toast
 
   const translateY = useRef(new Animated.Value(-100)).current
@@ -38,10 +39,10 @@ const Toast = () => {
     <Animated.View
       style={[
         styles.container,
-        { transform: [{ translateY }], backgroundColor: Colors[colorScheme].backgroundLight }
+        { transform: [{ translateY }], backgroundColor: Colors[theme].backgroundLight }
       ]}
     >
-      <Text style={[styles.message, { color: Colors[colorScheme].text }]}>{message}</Text>
+      <Text style={[styles.message, { color: Colors[theme].text }]}>{message}</Text>
     </Animated.View>
   )
 }
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#222222',
     textAlign: 'center',
-    fontFamily: 'Nunito-Black'
+    fontFamily: 'Nunito-Bold'
   }
 })
 

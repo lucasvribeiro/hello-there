@@ -1,12 +1,12 @@
-import { useColorScheme, View } from 'react-native'
 import { Tabs } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { useSelector } from 'react-redux'
 import { Colors } from '@/constants/Colors'
+import useTheme from '@/hooks/useTheme'
 
 const TabLayout = () => {
   const favorites = useSelector((state: any) => state.color.favorites)
-  const colorScheme = useColorScheme() ?? 'light'
+  const { theme } = useTheme()
 
   return (
     <Tabs
@@ -14,8 +14,8 @@ const TabLayout = () => {
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
-        tabBarActiveTintColor: Colors[colorScheme].text,
-        tabBarInactiveTintColor: Colors[colorScheme].textLight,
+        tabBarActiveTintColor: Colors[theme].text,
+        tabBarInactiveTintColor: Colors[theme].textLight,
         tabBarIconStyle: { margin: 'auto' },
         tabBarStyle: {}
       }}
@@ -58,15 +58,11 @@ const TabLayout = () => {
         }}
       />
       <Tabs.Screen
-        name="game"
+        name="history"
         options={{
-          title: 'Game',
+          title: 'History',
           tabBarIcon: ({ focused, color }) => (
-            <Ionicons
-              name={focused ? 'game-controller' : 'game-controller-outline'}
-              color={color}
-              size={24}
-            />
+            <Ionicons name={focused ? 'play-back' : 'play-back-outline'} color={color} size={24} />
           )
         }}
       />

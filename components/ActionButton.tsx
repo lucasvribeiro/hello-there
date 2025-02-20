@@ -8,6 +8,7 @@ import {
   StyleProp
 } from 'react-native'
 import React, { useRef } from 'react'
+import * as Haptics from 'expo-haptics'
 
 interface ActionButtonProps {
   text?: string
@@ -19,6 +20,12 @@ interface ActionButtonProps {
 
 const ActionButton = ({ icon, text, textStyle, containerStyle, onPress }: ActionButtonProps) => {
   const scaleValue = useRef(new Animated.Value(1)).current
+
+  const handlePress = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+
+    onPress()
+  }
 
   const handlePressIn = () => {
     Animated.spring(scaleValue, {
@@ -37,7 +44,7 @@ const ActionButton = ({ icon, text, textStyle, containerStyle, onPress }: Action
   }
 
   return (
-    <Pressable onPress={onPress} onPressIn={handlePressIn} onPressOut={handlePressOut}>
+    <Pressable onPress={handlePress} onPressIn={handlePressIn} onPressOut={handlePressOut}>
       <Animated.View
         style={[
           styles.button,

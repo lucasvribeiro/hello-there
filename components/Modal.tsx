@@ -1,9 +1,9 @@
-import { Modal as RNModal, StyleSheet, TouchableOpacity, Animated, useColorScheme } from 'react-native'
+import { Modal as RNModal, StyleSheet, TouchableOpacity, Animated } from 'react-native'
 import { ReactNode, useEffect, useRef } from 'react'
 import { DEFAULT_SHADOW } from '@/constants'
 import { useSelector } from 'react-redux'
 import { Colors } from '@/constants/Colors'
-
+import useTheme from '@/hooks/useTheme'
 type ModalProps = {
   visible: boolean
   onClose: () => void
@@ -11,7 +11,7 @@ type ModalProps = {
 }
 
 const Modal = ({ visible, onClose, children }: ModalProps) => {
-  const colorScheme = useColorScheme() ?? 'light'
+  const { theme } = useTheme()
   const backgroundOpacity = useRef(new Animated.Value(0)).current
 
   useEffect(() => {
@@ -36,7 +36,7 @@ const Modal = ({ visible, onClose, children }: ModalProps) => {
           <TouchableOpacity
             activeOpacity={1}
             onPress={(e) => e.stopPropagation()}
-            style={[styles.modalContent, { backgroundColor: Colors[colorScheme].backgroundLight }]}
+            style={[styles.modalContent, { backgroundColor: Colors[theme].backgroundLight }]}
           >
             {children}
           </TouchableOpacity>

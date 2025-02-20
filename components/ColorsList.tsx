@@ -10,10 +10,10 @@ import ColorSquare from './ColorSquare'
 interface ColorsListProps {
   data: Color[]
   enableScroll?: boolean
-  highlightColor?: string
+  highlightIndex?: number
 }
 
-const ColorsList = ({ data, enableScroll = true, highlightColor }: ColorsListProps) => {
+const ColorsList = ({ data, enableScroll = true, highlightIndex }: ColorsListProps) => {
   const dispatch = useDispatch()
 
   const flatListRef = useRef<FlatList>(null)
@@ -22,9 +22,9 @@ const ColorsList = ({ data, enableScroll = true, highlightColor }: ColorsListPro
     if (enableScroll) flatListRef.current?.scrollToEnd({ animated: true })
   }, [data])
 
-  const handleColorPress = (item: Color) => {
+  const handleColorPress = (item: Color, index: number) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-    dispatch(setColor(item))
+    dispatch(setColor({ ...item, type: 'index', index }))
   }
 
   return (
@@ -35,12 +35,12 @@ const ColorsList = ({ data, enableScroll = true, highlightColor }: ColorsListPro
         ref={flatListRef}
         keyExtractor={(item) => item.hex}
         contentContainerStyle={{ paddingVertical: 10 }}
-        renderItem={({ item }) => (
-          <View style={{ marginHorizontal: 4 }}>
+        renderItem={({ item, index }) => (
+          <View key={item.hex} style={{ marginHorizontal: 4 }}>
             <ColorSquare
-              withBorder={item.hex === highlightColor}
               color={item.hex}
-              onPress={() => handleColorPress(item)}
+              onPress={() => handleColorPress(item, index)}
+              withBorder={highlightIndex !== undefined && highlightIndex === index}
             />
           </View>
         )}

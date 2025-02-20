@@ -1,12 +1,5 @@
-import {
-  View,
-  StyleSheet,
-  Pressable,
-  Text,
-  ActivityIndicator,
-  Animated,
-  useColorScheme
-} from 'react-native'
+import React from 'react'
+import { View, StyleSheet, Pressable, Text, Animated } from 'react-native'
 import { useSelector } from 'react-redux'
 import * as Speech from 'expo-speech'
 import * as Clipboard from 'expo-clipboard'
@@ -21,50 +14,57 @@ import { useState } from 'react'
 import ColorPalette from './ColorPalette'
 import Loading from './Loading'
 import { Colors } from '@/constants/Colors'
+import useTheme from '@/hooks/useTheme'
 interface InfoModalProps {
   isModalVisible: boolean
   setIsModalVisible: (visible: boolean) => void
 }
 
 const InfoModal = ({ isModalVisible, setIsModalVisible }: InfoModalProps) => {
-  const colorScheme = useColorScheme() ?? 'light'
   const color = useSelector((state: any) => state.color.color)
   const { colorData, error, isLoading } = useColorData()
 
-  console.log(colorData?.contrast)
-
   if (error) return null
-  if (isLoading) return <Loading />
 
   return (
     <Modal visible={isModalVisible} onClose={() => setIsModalVisible(false)}>
-      <View style={[styles.border, { backgroundColor: `#${color.hex}` }]} />
-
-      <View style={styles.content}>
-        <View style={styles.colorNameContainer}>
-          <Text
-            style={[
-              styles.hexColor,
-              {
-                backgroundColor: `#${color.hex}`,
-                borderColor: `${colorData?.contrast}CC`,
-                color: `${colorData?.contrast}EE`
-              }
-            ]}
-          >{`${colorData?.name}`}</Text>
-
-          <SpeakButton colorData={colorData} />
+      {isLoading ? (
+        <View style={styles.loadingContainer}>
+          <Loading />
         </View>
+      ) : (
+        <>
+          <View style={[styles.border, { backgroundColor: `#${color.hex}` }]} />
 
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
-          <ColorCode label="HEX" value={colorData?.hex} />
-          <ColorCode label="RGB" value={colorData?.rgb} />
-          <ColorCode label="HSL" value={colorData?.hsl} />
-          <ColorCode label="CMYK" value={colorData?.cmyk} />
-        </View>
+          <View style={styles.content}>
+            <View style={styles.colorNameContainer}>
+              <Text
+                style={[
+                  styles.hexColor,
+                  {
+                    backgroundColor: `#${color.hex}`,
+                    borderColor: `${colorData?.contrast}CC`,
+                    color: `${colorData?.contrast}EE`
+                  }
+                ]}
+              >{`${colorData?.name}`}</Text>
 
-        <ColorPalette />
-      </View>
+              <SpeakButton colorData={colorData} />
+            </View>
+
+            <View
+              style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}
+            >
+              <ColorCode label="HEX" value={colorData?.hex} />
+              <ColorCode label="RGB" value={colorData?.rgb} />
+              <ColorCode label="HSL" value={colorData?.hsl} />
+              <ColorCode label="CMYK" value={colorData?.cmyk} />
+            </View>
+
+            <ColorPalette />
+          </View>
+        </>
+      )}
     </Modal>
   )
 }
@@ -77,7 +77,7 @@ const ColorCode = ({
   value: string | Array<number> | undefined
 }) => {
   const color = useSelector((state: any) => state.color.color)
-  const colorScheme = useColorScheme() ?? 'light'
+  const { theme } = useTheme()
   const valueString = Array.isArray(value) ? value.join(', ') : value
   const [scale] = useState(new Animated.Value(1))
 
@@ -105,7 +105,7 @@ const ColorCode = ({
 
   return (
     <View style={styles.colorCodeContainer}>
-      <Text style={[styles.colorCodeText, { color: Colors[colorScheme].textLight }]}>{label}</Text>
+      <Text style={[styles.colorCodeText, { color: Colors[theme].textLight }]}>{label}</Text>
 
       <Animated.View style={animatedStyle}>
         <Pressable
@@ -114,7 +114,7 @@ const ColorCode = ({
           onPressIn={handlePressIn}
           onPressOut={handlePressOut}
         >
-          <Text style={[styles.colorCodeValue, { color: Colors[colorScheme].text }]}>
+          <Text style={[styles.colorCodeValue, { color: Colors[theme].text }]}>
             {`${valueString}`}
           </Text>
           <ActionButton
@@ -180,6 +180,7 @@ const styles = StyleSheet.create({
   content: {
     zIndex: 1,
     paddingVertical: 38,
+    minHeight: 400,
     paddingHorizontal: 20
   },
   colorNameContainer: {
@@ -209,6 +210,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     textAlign: 'center',
     ...DEFAULT_SHADOW
+  },
+  loadingContainer: {
+    minHeight: 400,
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 })
 

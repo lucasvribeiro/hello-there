@@ -4,6 +4,7 @@ import { persistReducer, persistStore } from 'redux-persist'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import colorReducer from './reducers/color'
+import userReducer from './reducers/user'
 
 const persistConfig = {
   key: 'root',
@@ -11,7 +12,8 @@ const persistConfig = {
 }
 
 const rootReducer = combineReducers({
-  color: colorReducer
+  color: colorReducer,
+  user: userReducer
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
@@ -23,6 +25,6 @@ const store = configureStore({
 
 const persistor = persistStore(store)
 
-persistor.purge()
+// persistor.purge()
 
 export { store, persistor }

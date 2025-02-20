@@ -1,13 +1,6 @@
-export const DEFAULT_COLOR = { hex: '#FFFFFF', luminance: 1 }
-
 export const MAXIMUM_HISTORY_LENGTH = 100
 
 export const MAXIMUM_FAVORITES_LENGTH = 50
-
-export const STORAGE_KEYS = {
-  COLOR: 'color',
-  FAVORITES: 'favorites'
-}
 
 export const DEFAULT_SHADOW = {
   shadowColor: '#000',
@@ -20,38 +13,38 @@ export const DEFAULT_SHADOW = {
 export const ACHIEVEMENTS = [
   {
     id: 0,
-    trigger: 1,
-    title: 'First Color Changed',
+    trigger: 5,
+    title: 'Beginner',
     icon: '🎨'
   },
   {
     id: 1,
     trigger: 10,
-    title: 'Color Explorer - 10 Colors Changed',
+    title: 'Explorer',
     icon: '🖌️'
   },
   {
     id: 2,
     trigger: 30,
-    title: 'Palette Master - 30 Colors Changed',
+    title: 'Master',
     icon: '🖼️'
   },
   {
     id: 3,
     trigger: 50,
-    title: 'Color Alchemist - 50 Colors Changed',
+    title: 'Alchemist',
     icon: '🔮'
   },
   {
     id: 4,
     trigger: 100,
-    title: 'Chromatic Legend - 100 Colors Changed',
+    title: 'Legend',
     icon: '🌈'
   },
   {
     id: 5,
     trigger: 200,
-    title: 'Colorful Legend - 200 Colors Changed',
+    title: 'Superstar',
     icon: '🦄'
   }
 ]

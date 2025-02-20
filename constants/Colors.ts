@@ -9,6 +9,6 @@ export const Colors = {
     text: '#FFFFFF',
     textLight: '#AAAAAA',
     background: '#1A1A1A',
-    backgroundLight: '#222222'
+    backgroundLight: '#333333'
   }
 }
