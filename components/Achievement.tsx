@@ -1,43 +1,38 @@
-import { View, Text, StyleSheet } from 'react-native'
-import React from 'react'
-import { Achievement as AchievementType } from '@/types'
-import { DEFAULT_SHADOW } from '@/constants'
-import useTheme from '@/hooks/useTheme'
-import { Colors } from '@/constants'
+import { View, Text, StyleSheet, ViewStyle } from 'react-native'
 
-const Achievement = ({ achievement }: { achievement: AchievementType }) => {
+import { Colors } from '@/constants'
+import useTheme from '@/hooks/useTheme'
+import { DEFAULT_SHADOW } from '@/constants'
+import { Achievement as AchievementType } from '@/types'
+
+interface AchievementProps {
+  achievement: AchievementType
+  customStyle?: ViewStyle
+}
+
+const Achievement = ({ achievement, customStyle }: AchievementProps) => {
   const theme = useTheme()
 
   return (
-    <View style={[styles.achievementContainer, { backgroundColor: Colors[theme].background }]}>
+    <View style={[styles.container, { backgroundColor: Colors[theme].background }, customStyle]}>
       {!achievement.unlocked && (
         <View style={[styles.overlay, { backgroundColor: `${Colors[theme].backgroundLight}DD` }]} />
       )}
 
-      <View style={[styles.achievementContent, { backgroundColor: Colors[theme].text }]}>
-        <Text style={[styles.achievementIcon, { color: Colors[theme].background }]}>
-          {achievement.icon}
-        </Text>
-        <Text style={[styles.achievementTrigger, { color: Colors[theme].background }]}>
+      <View style={[styles.content, { backgroundColor: Colors[theme].text }]}>
+        <Text style={[styles.icon, { color: Colors[theme].background }]}>{achievement.icon}</Text>
+
+        <Text style={[styles.trigger, { color: Colors[theme].background }]}>
           {achievement.trigger} colors
         </Text>
-        <Text style={[styles.achievementTitle, { color: Colors[theme].background }]}>
-          {achievement.title}
-        </Text>
+
+        <Text style={[styles.title, { color: Colors[theme].background }]}>{achievement.title}</Text>
       </View>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  achievementContainer: {
-    overflow: 'hidden',
-    borderRadius: 10,
-    padding: 6,
-    height: 100,
-    width: 100,
-    ...DEFAULT_SHADOW
-  },
   overlay: {
     zIndex: 1,
     top: 0,
@@ -46,28 +41,36 @@ const styles = StyleSheet.create({
     bottom: 0,
     position: 'absolute'
   },
-  achievementContent: {
-    flex: 1,
-    alignItems: 'center',
+  container: {
+    padding: 6,
+    width: 100,
+    height: 100,
     borderRadius: 10,
-    padding: 4,
+    overflow: 'hidden',
     ...DEFAULT_SHADOW
   },
-  achievementIcon: {
-    marginBottom: 2,
-    fontSize: 28
+  content: {
+    flex: 1,
+    padding: 4,
+    borderRadius: 10,
+    alignItems: 'center',
+    ...DEFAULT_SHADOW
   },
-  achievementTitle: {
-    textAlign: 'center',
-    fontFamily: 'Nunito-Bold',
-    lineHeight: 18,
-    fontSize: 16
+  icon: {
+    fontSize: 28,
+    marginBottom: 2
   },
-  achievementTrigger: {
+  trigger: {
     fontSize: 12,
-    fontFamily: 'Nunito-Light',
+    lineHeight: 16,
     textAlign: 'center',
-    lineHeight: 16
+    fontFamily: 'Nunito-Light'
+  },
+  title: {
+    fontSize: 16,
+    lineHeight: 18,
+    textAlign: 'center',
+    fontFamily: 'Nunito-Bold'
   }
 })
 

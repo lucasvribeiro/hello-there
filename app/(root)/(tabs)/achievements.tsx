@@ -1,30 +1,28 @@
-import { View, StyleSheet } from 'react-native'
-import ScreenWrapper from '@/components/ScreenWrapper'
-import Achievement from '@/components/Achievement'
+import { useMemo } from 'react'
+import { FlatList } from 'react-native'
 import { useSelector } from 'react-redux'
-import { Achievement as AchievementType } from '@/types'
+
+import Achievement from '@/components/Achievement'
+import ScreenWrapper from '@/components/ScreenWrapper'
 
 const Achievements = () => {
   const achievements = useSelector((state: any) => state.user.achievements)
 
+  const customMargin = useMemo(() => ({ marginRight: 8 }), [])
+
   return (
     <ScreenWrapper title="Achievements">
-      <View style={styles.achievementsContainer}>
-        {achievements.map((achievement: AchievementType) => (
-          <Achievement key={achievement.id} achievement={achievement} />
-        ))}
-      </View>
+      <FlatList
+        data={achievements}
+        numColumns={3}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={{ gap: 10 }}
+        renderItem={({ item }) => (
+          <Achievement key={item.id} achievement={item} customStyle={customMargin} />
+        )}
+      />
     </ScreenWrapper>
   )
 }
-
-const styles = StyleSheet.create({
-  achievementsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    rowGap: 10,
-    columnGap: 8
-  }
-})
 
 export default Achievements

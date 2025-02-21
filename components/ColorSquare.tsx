@@ -24,8 +24,6 @@ const ColorSquare = ({
   withBorder = false,
   customStyle
 }: ColorSquareProps) => {
-  console.log('ColorSquare')
-
   const theme = useTheme()
   const scaleValue = useRef(new Animated.Value(0)).current
 
