@@ -1,6 +1,8 @@
+import { StyleSheet } from 'react-native'
+import { useSelector } from 'react-redux'
 import { Tabs } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
-import { useSelector } from 'react-redux'
+
 import { Colors } from '@/constants'
 import useTheme from '@/hooks/useTheme'
 
@@ -14,10 +16,9 @@ const TabLayout = () => {
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
-        tabBarActiveTintColor: Colors[theme].text,
-        tabBarInactiveTintColor: Colors[theme].textLight,
         tabBarIconStyle: { margin: 'auto' },
-        tabBarStyle: {}
+        tabBarActiveTintColor: Colors[theme].text,
+        tabBarInactiveTintColor: Colors[theme].textLight
       }}
     >
       <Tabs.Screen
@@ -34,15 +35,7 @@ const TabLayout = () => {
         options={{
           title: 'Favorites',
           tabBarBadge: favorites.length,
-          tabBarBadgeStyle: {
-            height: 14,
-            minWidth: 14,
-            fontSize: 10,
-            lineHeight: 14,
-            color: '#FFFFFF',
-            fontFamily: 'Nunito-Bold',
-            backgroundColor: '#888888'
-          },
+          tabBarBadgeStyle: styles.tabBarBadge,
           tabBarIcon: ({ focused, color }) => (
             <Ionicons name={focused ? 'heart' : 'heart-outline'} color={color} size={24} />
           )
@@ -78,5 +71,17 @@ const TabLayout = () => {
     </Tabs>
   )
 }
+
+const styles = StyleSheet.create({
+  tabBarBadge: {
+    height: 14,
+    minWidth: 14,
+    fontSize: 10,
+    lineHeight: 14,
+    color: '#FFFFFF',
+    fontFamily: 'Nunito-Bold',
+    backgroundColor: '#888888'
+  }
+})
 
 export default TabLayout

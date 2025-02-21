@@ -1,14 +1,13 @@
-import { useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { View } from 'react-native'
+import { useSelector, useDispatch } from 'react-redux'
 
+import { Achievements } from '@/constants'
 import ColorCard from '@/components/ColorCard'
 import ColorsList from '@/components/ColorsList'
 import ScreenWrapper from '@/components/ScreenWrapper'
-import { View } from 'react-native'
-import { useEffect } from 'react'
-import { Achievements } from '@/constants'
-import { useDispatch } from 'react-redux'
-import { achievementUnlocked } from '@/redux/reducers/user'
 import { useToastContext } from '@/contexts/ToastContext'
+import { achievementUnlocked } from '@/redux/reducers/user'
 
 const Home = () => {
   const dispatch = useDispatch()

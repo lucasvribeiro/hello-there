@@ -1,17 +1,18 @@
-import React, { useEffect, useRef } from 'react'
-import { StyleSheet, Animated, Pressable } from 'react-native'
+import React, { memo, useEffect, useRef } from 'react'
+import { StyleSheet, Animated, Pressable, ViewStyle } from 'react-native'
 
-import { DEFAULT_SHADOW } from '@/constants'
 import { Colors } from '@/constants'
+import { DEFAULT_SHADOW } from '@/constants'
 import useTheme from '@/hooks/useTheme'
 
 type ColorSquareProps = {
+  color: string
   width?: number
   height?: number
   padding?: number
-  color: string
-  onPress?: () => void
   withBorder?: boolean
+  customStyle?: ViewStyle
+  onPress?: () => void
 }
 
 const ColorSquare = ({
@@ -20,8 +21,11 @@ const ColorSquare = ({
   width = 60,
   height = 60,
   padding = 6,
-  withBorder = false
+  withBorder = false,
+  customStyle
 }: ColorSquareProps) => {
+  console.log('ColorSquare')
+
   const theme = useTheme()
   const scaleValue = useRef(new Animated.Value(0)).current
 
@@ -57,7 +61,8 @@ const ColorSquare = ({
             padding,
             backgroundColor: Colors[theme].background,
             borderWidth: withBorder ? 1 : 0,
-            borderColor: Colors[theme].textLight
+            borderColor: Colors[theme].textLight,
+            ...customStyle
           }
         ]}
       >
@@ -80,4 +85,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default ColorSquare
+export default memo(ColorSquare)
