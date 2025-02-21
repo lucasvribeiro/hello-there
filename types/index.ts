@@ -73,4 +73,4 @@ export interface ColorState {
   currentIndex: number
 }
 
-export type HistoryAction = 'new' | 'prev' | 'next'
+export type HistoryAction = 'new' | 'prev' | 'next' | 'index'

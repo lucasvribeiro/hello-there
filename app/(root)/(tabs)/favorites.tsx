@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { memo, useCallback, useMemo } from 'react'
 import { FlatList } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -8,7 +8,7 @@ import ColorSquare from '@/components/ColorSquare'
 import ScreenWrapper from '@/components/ScreenWrapper'
 import { removeFromFavorites } from '@/redux/reducers/color'
 
-const FavoriteItem = ({ item }: { item: Color }) => {
+const FavoriteItem = memo(({ item }: { item: Color }) => {
   const dispatch = useDispatch()
   const customMargin = useMemo(() => ({ marginRight: 6 }), [])
 
@@ -27,7 +27,7 @@ const FavoriteItem = ({ item }: { item: Color }) => {
       customStyle={customMargin}
     />
   )
-}
+})
 
 const Favorites = () => {
   const favorites = useSelector((state: any) => state.color.favorites)

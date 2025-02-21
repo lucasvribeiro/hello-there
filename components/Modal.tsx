@@ -1,46 +1,46 @@
-import { Modal as RNModal, StyleSheet, TouchableOpacity, Animated } from 'react-native'
 import { ReactNode, useEffect, useRef } from 'react'
-import { DEFAULT_SHADOW } from '@/constants'
-import { useSelector } from 'react-redux'
+import { Modal as RNModal, StyleSheet, Animated, Pressable } from 'react-native'
+
 import { Colors } from '@/constants'
 import useTheme from '@/hooks/useTheme'
+import { DEFAULT_SHADOW } from '@/constants'
+
 type ModalProps = {
   visible: boolean
   onClose: () => void
   children: ReactNode
 }
 
-const Modal = ({ visible, onClose, children }: ModalProps) => {
+const Modal = ({ visible, children, onClose }: ModalProps) => {
   const theme = useTheme()
   const backgroundOpacity = useRef(new Animated.Value(0)).current
-
-  useEffect(() => {
-    Animated.timing(backgroundOpacity, {
-      toValue: visible ? 1 : 0,
-      duration: 700,
-      useNativeDriver: false
-    }).start()
-  }, [visible])
 
   const animatedStyle = {
     backgroundColor: backgroundOpacity.interpolate({
       inputRange: [0, 1],
-      outputRange: ['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.8)']
+      outputRange: ['#00000000', '#000000CC']
     })
   }
 
+  useEffect(() => {
+    Animated.timing(backgroundOpacity, {
+      duration: 700,
+      useNativeDriver: false,
+      toValue: visible ? 1 : 0
+    }).start()
+  }, [visible])
+
   return (
-    <RNModal animationType="slide" transparent={true} visible={visible} onRequestClose={onClose}>
+    <RNModal visible={visible} onRequestClose={onClose} transparent={true} animationType="slide">
       <Animated.View style={[styles.overlay, animatedStyle]}>
-        <TouchableOpacity activeOpacity={1} onPress={onClose} style={styles.overlayTouchable}>
-          <TouchableOpacity
-            activeOpacity={1}
+        <Pressable onPress={onClose} style={styles.overlayTouchable}>
+          <Pressable
             onPress={(e) => e.stopPropagation()}
             style={[styles.modalContent, { backgroundColor: Colors[theme].backgroundLight }]}
           >
             {children}
-          </TouchableOpacity>
-        </TouchableOpacity>
+          </Pressable>
+        </Pressable>
       </Animated.View>
     </RNModal>
   )

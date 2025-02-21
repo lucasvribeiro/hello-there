@@ -22,12 +22,12 @@ const colorReducer = createSlice({
   initialState,
   reducers: {
     setColor(state, action) {
-      const { type, ...newColor } = action.payload
-      state.color = newColor
+      const { color, type, index } = action.payload
+      state.color = color
 
       switch (type as HistoryAction) {
         case 'new':
-          state.history.push(action.payload)
+          state.history.push(color)
           state.currentIndex = state.history.length - 1
           break
         case 'prev':
@@ -35,6 +35,9 @@ const colorReducer = createSlice({
           break
         case 'next':
           state.currentIndex = state.currentIndex + 1
+          break
+        case 'index':
+          state.currentIndex = index
           break
       }
     },

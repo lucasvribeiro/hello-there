@@ -1,14 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { UserState, Theme } from '@/types'
+import { UserState } from '@/types'
 import { Achievements } from '@/constants'
 
 const initialState: UserState = {
   preferences: { theme: 'device' },
-  achievements: Achievements.map((achievement) => ({
-    ...achievement,
-    unlocked: false
-  }))
+  achievements: []
 }
 
 const userReducer = createSlice({
@@ -19,14 +16,14 @@ const userReducer = createSlice({
       state.preferences.theme = action.payload.theme
     },
 
-    achievementUnlocked(state, action) {
-      const achievement = state.achievements.find((item) => item.id === action.payload.id)
+    checkAchievement(state, action) {
+      const achievement = Achievements.find((item) => item.trigger === action.payload.historySize)
 
-      if (achievement) achievement.unlocked = true
+      if (achievement) state.achievements.push(achievement)
     }
   }
 })
 
-export const { setTheme, achievementUnlocked } = userReducer.actions
+export const { setTheme, checkAchievement } = userReducer.actions
 
 export default userReducer.reducer

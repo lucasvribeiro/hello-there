@@ -1,21 +1,28 @@
+import { memo, useMemo } from 'react'
 import { View, Text, StyleSheet, ViewStyle } from 'react-native'
 
 import { Colors } from '@/constants'
 import useTheme from '@/hooks/useTheme'
 import { DEFAULT_SHADOW } from '@/constants'
 import { Achievement as AchievementType } from '@/types'
+import { useSelector } from 'react-redux'
 
 interface AchievementProps {
   achievement: AchievementType
   customStyle?: ViewStyle
 }
 
-const Achievement = ({ achievement, customStyle }: AchievementProps) => {
+const Achievement = memo(({ achievement, customStyle }: AchievementProps) => {
   const theme = useTheme()
+  const achievements = useSelector((state: any) => state.user.achievements)
+
+  const unlocked = useMemo(() => {
+    return achievements.some((item: AchievementType) => item.id === achievement.id)
+  }, [achievements, achievement.id])
 
   return (
     <View style={[styles.container, { backgroundColor: Colors[theme].background }, customStyle]}>
-      {!achievement.unlocked && (
+      {!unlocked && (
         <View style={[styles.overlay, { backgroundColor: `${Colors[theme].backgroundLight}DD` }]} />
       )}
 
@@ -30,7 +37,7 @@ const Achievement = ({ achievement, customStyle }: AchievementProps) => {
       </View>
     </View>
   )
-}
+})
 
 const styles = StyleSheet.create({
   overlay: {

@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { memo, useState } from 'react'
 import { Share } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import Ionicons from '@expo/vector-icons/Ionicons'
 
 import { Color } from '@/types'
@@ -8,10 +8,8 @@ import { Colors } from '@/constants'
 
 import InfoModal from './ColorModal'
 import ActionButton from './ActionButton'
-import { useToastContext } from '@/contexts/ToastContext'
-import { addToFavorites, removeFromFavorites } from '@/redux/reducers/color'
 
-const InfoButton = () => {
+const InfoButton = memo(() => {
   const [colorInfoModal, setColorInfoModal] = useState(false)
 
   const color: Color = useSelector((state: any) => state.color.color)
@@ -34,26 +32,14 @@ const InfoButton = () => {
       )}
     </>
   )
-}
+})
 
-const FavoriteButton = () => {
-  const dispatch = useDispatch()
-  const { showToast } = useToastContext()
-
+const FavoriteButton = memo(({ handleFavorite }: { handleFavorite: () => void }) => {
   const color: Color = useSelector((state: any) => state.color.color)
   const favorites: Color[] = useSelector((state: any) => state.color.favorites)
 
   const buttonColor = Colors[color?.contrast ?? 'light'].background
   const isFavorite = favorites.some((favorite: Color) => favorite.hex === color.hex)
-
-  const handleFavorite = () => {
-    if (isFavorite) {
-      dispatch(removeFromFavorites(color))
-    } else {
-      showToast(`#${color.hex} added to favorites`)
-      dispatch(addToFavorites(color))
-    }
-  }
 
   return (
     <ActionButton
@@ -64,9 +50,9 @@ const FavoriteButton = () => {
       }
     />
   )
-}
+})
 
-const ShareButton = () => {
+const ShareButton = memo(() => {
   const color: Color = useSelector((state: any) => state.color.color)
   const buttonColor = Colors[color?.contrast ?? 'light'].background
 
@@ -88,7 +74,7 @@ const ShareButton = () => {
       icon={<Ionicons name="share-social-outline" size={24} color={buttonColor} />}
     />
   )
-}
+})
 
 export default {
   InfoButton,

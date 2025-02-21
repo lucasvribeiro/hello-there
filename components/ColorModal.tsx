@@ -1,28 +1,28 @@
-import React from 'react'
-import { View, StyleSheet, Pressable, Text, Animated } from 'react-native'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
+import { View, StyleSheet, Pressable, Text, Animated } from 'react-native'
 import * as Speech from 'expo-speech'
 import * as Clipboard from 'expo-clipboard'
 
-import Modal from './Modal'
-import { DEFAULT_SHADOW } from '@/constants'
-import useColorData from '@/hooks/useColorData'
-import ActionButton from './ActionButton'
-import Ionicons from '@expo/vector-icons/Ionicons'
 import { ColorData } from '@/types'
-import { useState } from 'react'
-import ColorPalette from './ColorPalette'
-import Loading from './Loading'
 import { Colors } from '@/constants'
 import useTheme from '@/hooks/useTheme'
+import { DEFAULT_SHADOW } from '@/constants'
+import useColorData from '@/hooks/useColorData'
+import Ionicons from '@expo/vector-icons/Ionicons'
+
+import Modal from './Modal'
+import Loading from './Loading'
+import ActionButton from './ActionButton'
+import ColorPalette from './ColorPalette'
 interface InfoModalProps {
   isModalVisible: boolean
   setIsModalVisible: (visible: boolean) => void
 }
 
 const InfoModal = ({ isModalVisible, setIsModalVisible }: InfoModalProps) => {
-  const color = useSelector((state: any) => state.color.color)
   const { colorData, isError, isLoading } = useColorData()
+  const color = useSelector((state: any) => state.color.color)
 
   if (isError) return null
 
@@ -49,7 +49,7 @@ const InfoModal = ({ isModalVisible, setIsModalVisible }: InfoModalProps) => {
                 ]}
               >{`${colorData?.name}`}</Text>
 
-              <SpeakButton colorData={colorData} />
+              {colorData && <SpeakButton colorData={colorData} />}
             </View>
 
             <View
@@ -69,17 +69,16 @@ const InfoModal = ({ isModalVisible, setIsModalVisible }: InfoModalProps) => {
   )
 }
 
-const ColorCode = ({
-  label,
-  value
-}: {
+interface ColorCodeProps {
   label: string
   value: string | Array<number> | undefined
-}) => {
-  const color = useSelector((state: any) => state.color.color)
+}
+
+const ColorCode = ({ label, value }: ColorCodeProps) => {
   const theme = useTheme()
-  const valueString = Array.isArray(value) ? value.join(', ') : value
   const [scale] = useState(new Animated.Value(1))
+  const color = useSelector((state: any) => state.color.color)
+  const valueString = Array.isArray(value) ? value.join(', ') : value
 
   const handlePressIn = () => {
     Animated.spring(scale, {
@@ -109,10 +108,10 @@ const ColorCode = ({
 
       <Animated.View style={animatedStyle}>
         <Pressable
-          style={{ flexDirection: 'row' }}
           onPress={handleCopy}
           onPressIn={handlePressIn}
           onPressOut={handlePressOut}
+          style={{ flexDirection: 'row' }}
         >
           <Text style={[styles.colorCodeValue, { color: Colors[theme].text }]}>
             {`${valueString}`}
@@ -148,44 +147,44 @@ const SpeakButton = ({ colorData }: { colorData: ColorData | null }) => {
 
 const styles = StyleSheet.create({
   copyButton: {
-    backgroundColor: 'transparent',
+    padding: 4,
     marginLeft: 2,
     borderRadius: 18,
-    padding: 4,
+    alignItems: 'center',
     justifyContent: 'center',
-    alignItems: 'center'
+    backgroundColor: 'transparent'
   },
   colorCodeContainer: {
     width: '48%',
-    alignSelf: 'flex-start',
-    marginBottom: 10
+    marginBottom: 10,
+    alignSelf: 'flex-start'
   },
   colorCodeText: {
     fontSize: 12,
     fontFamily: 'Nunito-Light'
   },
   colorCodeValue: {
-    lineHeight: 26,
     fontSize: 20,
+    lineHeight: 26,
     fontFamily: 'Nunito-Black'
   },
   border: {
-    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     height: 72,
-    width: '100%'
+    width: '100%',
+    position: 'absolute'
   },
   content: {
     zIndex: 1,
-    paddingVertical: 38,
     minHeight: 400,
+    paddingVertical: 38,
     paddingHorizontal: 20
   },
   colorNameContainer: {
-    alignSelf: 'center',
-    marginBottom: 10
+    marginBottom: 10,
+    alignSelf: 'center'
   },
   speakContainer: {
     top: 0,
@@ -194,21 +193,21 @@ const styles = StyleSheet.create({
     position: 'absolute'
   },
   speakButton: {
-    borderRadius: 18,
     padding: 5,
-    justifyContent: 'center',
+    borderRadius: 18,
     alignItems: 'center',
+    justifyContent: 'center',
     ...DEFAULT_SHADOW
   },
   hexColor: {
-    alignSelf: 'center',
     fontSize: 24,
-    fontFamily: 'Nunito-Bold',
-    borderRadius: 18,
     borderWidth: 4,
+    borderRadius: 18,
     paddingVertical: 10,
     paddingHorizontal: 16,
+    alignSelf: 'center',
     textAlign: 'center',
+    fontFamily: 'Nunito-Bold',
     ...DEFAULT_SHADOW
   },
   loadingContainer: {
