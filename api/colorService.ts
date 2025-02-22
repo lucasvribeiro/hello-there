@@ -32,12 +32,10 @@ const fetchColorApi = async <T>(
     return mapper(data)
   } catch (error: any) {
     if (error instanceof ColorApiError) console.error('[ERROR] Color API:', error)
-    
     else if (error.name === 'AbortError') console.log('[ERROR] Color API: Request was aborted')
-    
     else console.error('[ERROR] Color API:', error)
-    
-    return null
+
+    throw new ColorApiError('[ERROR] Color API:', error)
   }
 }
 
