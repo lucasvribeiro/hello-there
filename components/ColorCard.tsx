@@ -1,5 +1,12 @@
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { View, StyleSheet } from 'react-native'
+import Animated, {
+  interpolateColor,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming
+} from 'react-native-reanimated'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import * as Clipboard from 'expo-clipboard'
 
@@ -68,34 +75,54 @@ interface ColorCardContentProps {
 }
 
 const ColorCardContent = memo(
-  ({ color, buttonColor, handleCopy, handleFavorite, tapGesture }: ColorCardContentProps) => (
-    <View style={[styles.cardContent, { backgroundColor: `#${color.hex}` }]}>
-      <View style={styles.actionsContainer}>
-        <GestureDetector gesture={tapGesture}>
-          <ColorCardButtons.InfoButton />
-        </GestureDetector>
+  ({ color, buttonColor, handleCopy, handleFavorite, tapGesture }: ColorCardContentProps) => {
+    const prevColor = useSelector((state: any) => state.color.prevColor)
+    const progress = useSharedValue(0)
 
-        <View style={styles.rightButtons}>
+    useEffect(() => {
+      progress.value = 0
+      progress.value = withTiming(1, { duration: 300 })
+    }, [color.hex])
+
+    const animatedBackgroundColor = useAnimatedStyle(() => {
+      return {
+        backgroundColor: interpolateColor(
+          progress.value,
+          [0, 1],
+          [`#${prevColor.hex}`, `#${color.hex}`]
+        )
+      }
+    })
+
+    return (
+      <Animated.View style={[styles.cardContent, animatedBackgroundColor]}>
+        <View style={styles.actionsContainer}>
           <GestureDetector gesture={tapGesture}>
-            <ColorCardButtons.FavoriteButton handleFavorite={handleFavorite} />
+            <ColorCardButtons.InfoButton />
           </GestureDetector>
 
-          <GestureDetector gesture={tapGesture}>
-            <ColorCardButtons.ShareButton />
-          </GestureDetector>
+          <View style={styles.rightButtons}>
+            <GestureDetector gesture={tapGesture}>
+              <ColorCardButtons.FavoriteButton handleFavorite={handleFavorite} />
+            </GestureDetector>
+
+            <GestureDetector gesture={tapGesture}>
+              <ColorCardButtons.ShareButton />
+            </GestureDetector>
+          </View>
         </View>
-      </View>
 
-      <GestureDetector gesture={tapGesture}>
-        <ActionButton
-          onPress={handleCopy}
-          text={`#${color.hex}`}
-          textStyle={{ color: buttonColor }}
-          containerStyle={[styles.hexButton, { backgroundColor: `${buttonColor}22` }]}
-        />
-      </GestureDetector>
-    </View>
-  )
+        <GestureDetector gesture={tapGesture}>
+          <ActionButton
+            onPress={handleCopy}
+            text={`#${color.hex}`}
+            textStyle={{ color: buttonColor }}
+            containerStyle={[styles.hexButton, { backgroundColor: `${buttonColor}22` }]}
+          />
+        </GestureDetector>
+      </Animated.View>
+    )
+  }
 )
 
 const styles = StyleSheet.create({

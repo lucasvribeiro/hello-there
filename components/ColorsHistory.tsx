@@ -10,10 +10,10 @@ import { setColor } from '@/redux/reducers/color'
 interface HistoryItemProps {
   item: Color
   index: number
-  showBorder: boolean
+  selected: boolean
 }
 
-const HistoryItem = memo(({ item, index, showBorder }: HistoryItemProps) => {
+const HistoryItem = memo(({ item, index, selected }: HistoryItemProps) => {
   const dispatch = useDispatch()
   const customMargin = useMemo(() => ({ marginHorizontal: 4 }), [])
 
@@ -26,7 +26,7 @@ const HistoryItem = memo(({ item, index, showBorder }: HistoryItemProps) => {
     <ColorSquare
       key={item.hex}
       color={item.hex}
-      withBorder={showBorder}
+      selected={selected}
       customStyle={customMargin}
       onPress={handleColorPress}
     />
@@ -62,9 +62,10 @@ const ColorsHistory = () => {
         ref={historyFlatListRef}
         keyExtractor={(item) => item.hex}
         onScrollToIndexFailed={scrollToEnd}
+        showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ paddingVertical: 10 }}
         renderItem={({ item, index }) => (
-          <HistoryItem showBorder={currentIndex === index} item={item} index={index} />
+          <HistoryItem selected={currentIndex === index} item={item} index={index} />
         )}
       />
     </View>

@@ -5,6 +5,7 @@ import { LIMITS } from '@/constants'
 import { ColorState, History, Favorites, HistoryAction } from '@/types'
 
 const color = getColor()
+const prevColor = color
 const currentIndex: number = 0
 
 const history: History = [color]
@@ -12,6 +13,7 @@ const favorites: Favorites = []
 
 const initialState: ColorState = {
   color,
+  prevColor,
   history,
   favorites,
   currentIndex
@@ -23,6 +25,8 @@ const colorReducer = createSlice({
   reducers: {
     setColor(state, action) {
       const { color, type, index } = action.payload
+      
+      state.prevColor = state.color
       state.color = color
 
       switch (type as HistoryAction) {

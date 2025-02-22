@@ -1,5 +1,6 @@
-import React, { memo, useEffect, useRef } from 'react'
-import { StyleSheet, Animated, Pressable, ViewStyle } from 'react-native'
+import React, { memo, useEffect } from 'react'
+import { StyleSheet, Pressable, ViewStyle, View } from 'react-native'
+import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated'
 
 import { Colors } from '@/constants'
 import { DEFAULT_SHADOW } from '@/constants'
@@ -10,7 +11,7 @@ type ColorSquareProps = {
   width?: number
   height?: number
   padding?: number
-  withBorder?: boolean
+  selected?: boolean
   customStyle?: ViewStyle
   onPress?: () => void
 }
@@ -21,34 +22,34 @@ const ColorSquare = ({
   width = 60,
   height = 60,
   padding = 6,
-  withBorder = false,
+  selected,
   customStyle
 }: ColorSquareProps) => {
   const theme = useTheme()
-  const scaleValue = useRef(new Animated.Value(0)).current
+  const scaleValue = useSharedValue(0)
+  const selectedValue = useSharedValue(0)
 
-  const animate = () => {
-    Animated.spring(scaleValue, {
-      toValue: 1,
-      tension: 100,
-      friction: 7,
-      useNativeDriver: true
-    }).start()
-  }
+  scaleValue.value = withTiming(1, { duration: 300 })
 
-  useEffect(() => {
-    animate()
-  }, [])
-
-  useEffect(() => {
-    if (withBorder) {
-      scaleValue.setValue(0.8)
-      animate()
+  const scaleSquare = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: scaleValue.value }]
     }
-  }, [withBorder])
+  })
+
+  const scaleSelected = useAnimatedStyle(() => {
+    return {
+      opacity: selectedValue.value,
+      transform: [{ scale: selectedValue.value }]
+    }
+  })
+
+  useEffect(() => {
+    selectedValue.value = withTiming(selected ? 1 : 0, { duration: 300 })
+  }, [selected])
 
   return (
-    <Animated.View style={{ transform: [{ scale: scaleValue }] }}>
+    <Animated.View style={scaleSquare}>
       <Pressable
         onPress={onPress}
         style={[
@@ -58,13 +59,16 @@ const ColorSquare = ({
             height,
             padding,
             backgroundColor: Colors[theme].background,
-            borderWidth: withBorder ? 1 : 0,
             borderColor: Colors[theme].textLight,
             ...customStyle
           }
         ]}
       >
-        <Animated.View style={[styles.square, { backgroundColor: `#${color}` }]} />
+        <View style={[styles.square, { backgroundColor: `#${color}` }]} />
+
+        <Animated.View
+          style={[styles.selected, scaleSelected, { backgroundColor: `#${color}99` }]}
+        />
       </Pressable>
     </Animated.View>
   )
@@ -72,6 +76,7 @@ const ColorSquare = ({
 
 const styles = StyleSheet.create({
   pressable: {
+    position: 'relative',
     borderRadius: 12,
     ...DEFAULT_SHADOW
   },
@@ -80,6 +85,13 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 10,
     ...DEFAULT_SHADOW
+  },
+  selected: {
+    height: 4,
+    bottom: -10,
+    width: '35%',
+    borderRadius: 10,
+    marginHorizontal: 'auto'
   }
 })
 

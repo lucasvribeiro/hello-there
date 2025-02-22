@@ -71,6 +71,7 @@ export interface UserState {
 
 export interface ColorState {
   color: Color
+  prevColor: Color
   history: History
   favorites: Favorites
   currentIndex: number

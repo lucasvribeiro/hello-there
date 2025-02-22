@@ -26,7 +26,7 @@ const store = configureStore({
 const persistor = persistStore(store)
 
 if (__DEV__) {
-  // persistor.purge()
+  persistor.purge()
 }
 
 export { store, persistor }
