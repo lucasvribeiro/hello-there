@@ -19,11 +19,11 @@ const useColorGestures = () => {
   const doubleTap = useCallback(
     () =>
       Gesture.Tap()
-        .maxDelay(100)
-        .maxDuration(120)
+        .maxDelay(130)
+        .maxDuration(130)
         .numberOfTaps(2)
         .onEnd(() => {
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
           const isFavorite = favorites.some((favorite: Color) => favorite.hex === color.hex)
           if (isFavorite) {
             dispatch(removeFromFavorites(color))

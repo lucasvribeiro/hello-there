@@ -29,7 +29,7 @@ const ColorSquare = ({
   const scaleValue = useSharedValue(0)
   const selectedValue = useSharedValue(0)
 
-  scaleValue.value = withTiming(1, { duration: 300 })
+  scaleValue.value = withTiming(1, { duration: 200 })
 
   const scaleSquare = useAnimatedStyle(() => {
     return {
