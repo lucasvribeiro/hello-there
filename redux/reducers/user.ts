@@ -19,11 +19,19 @@ const userReducer = createSlice({
     checkAchievement(state, action) {
       const achievement = Achievements.find((item) => item.trigger === action.payload.historySize)
 
-      if (achievement) state.achievements.push(achievement)
+      if (achievement) state.achievements.push({ achievement, shown: false })
+    },
+
+    setAchievementShown(state, action) {
+      const achievement = state.achievements.find(
+        (item) => item.achievement.trigger === action.payload.trigger
+      )
+
+      if (achievement) achievement.shown = true
     }
   }
 })
 
-export const { setTheme, checkAchievement } = userReducer.actions
+export const { setTheme, checkAchievement, setAchievementShown } = userReducer.actions
 
 export default userReducer.reducer

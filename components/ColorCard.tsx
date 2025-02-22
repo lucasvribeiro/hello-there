@@ -7,9 +7,9 @@ import { Color } from '@/types'
 import useTheme from '@/hooks/useTheme'
 import { Colors } from '@/constants'
 import { DEFAULT_SHADOW } from '@/constants'
-import color, { addToFavorites, removeFromFavorites } from '@/redux/reducers/color'
+import { addToFavorites, removeFromFavorites } from '@/redux/reducers/color'
 import ActionButton from './ActionButton'
-import ColorActions from './ColorActions'
+import ColorCardButtons from './ColorCardButtons'
 import { useToastContext } from '@/contexts/ToastContext'
 import { memo, useCallback, useMemo } from 'react'
 import useColorGestures from '@/hooks/useColorGestures'
@@ -72,16 +72,16 @@ const ColorCardContent = memo(
     <View style={[styles.cardContent, { backgroundColor: `#${color.hex}` }]}>
       <View style={styles.actionsContainer}>
         <GestureDetector gesture={tapGesture}>
-          <ColorActions.InfoButton />
+          <ColorCardButtons.InfoButton />
         </GestureDetector>
 
         <View style={styles.rightButtons}>
           <GestureDetector gesture={tapGesture}>
-            <ColorActions.FavoriteButton handleFavorite={handleFavorite} />
+            <ColorCardButtons.FavoriteButton handleFavorite={handleFavorite} />
           </GestureDetector>
 
           <GestureDetector gesture={tapGesture}>
-            <ColorActions.ShareButton />
+            <ColorCardButtons.ShareButton />
           </GestureDetector>
         </View>
       </View>

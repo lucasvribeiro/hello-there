@@ -19,8 +19,8 @@ const useColorGestures = () => {
   const doubleTap = useCallback(
     () =>
       Gesture.Tap()
-        .maxDelay(150)
-        .maxDuration(150)
+        .maxDelay(100)
+        .maxDuration(120)
         .numberOfTaps(2)
         .onEnd(() => {
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)

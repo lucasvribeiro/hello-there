@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, ViewStyle } from 'react-native'
 import { Colors } from '@/constants'
 import useTheme from '@/hooks/useTheme'
 import { DEFAULT_SHADOW } from '@/constants'
-import { Achievement as AchievementType } from '@/types'
+import { AchievementState, Achievement as AchievementType } from '@/types'
 import { useSelector } from 'react-redux'
 
 interface AchievementProps {
@@ -17,7 +17,7 @@ const Achievement = memo(({ achievement, customStyle }: AchievementProps) => {
   const achievements = useSelector((state: any) => state.user.achievements)
 
   const unlocked = useMemo(() => {
-    return achievements.some((item: AchievementType) => item.id === achievement.id)
+    return achievements.some((item: AchievementState) => item.achievement.id === achievement.id)
   }, [achievements, achievement.id])
 
   return (

@@ -61,8 +61,11 @@ export type Favorites = Color[]
 export type Theme = 'light' | 'dark'
 
 export type ThemePreference = 'device' | Theme
+
+export type AchievementState = { achievement: Achievement; shown: boolean }
+
 export interface UserState {
-  achievements: Achievement[]
+  achievements: AchievementState[]
   preferences: { theme: ThemePreference }
 }
 

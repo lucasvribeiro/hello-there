@@ -59,8 +59,8 @@ const ShareButton = memo(() => {
   const handleShare = async () => {
     try {
       await Share.share({
-        message: `#${color.hex}`,
-        url: ''
+        message: `This color is amazing! Check it out: https://coolors.co/${color.hex}`,
+        url: `https://coolors.co/${color.hex}`
       })
     } catch (error: any) {
       console.error('[ERROR] handleShare:', error)

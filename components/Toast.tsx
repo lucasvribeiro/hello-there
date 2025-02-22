@@ -49,7 +49,7 @@ const Toast = () => {
 
 const styles = StyleSheet.create({
   container: {
-    zIndex: 100,
+    zIndex: 10000,
     alignSelf: 'center',
     position: 'absolute',
     borderRadius: 16,

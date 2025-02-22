@@ -3,28 +3,33 @@ import { useSelector } from 'react-redux'
 import { View, StyleSheet, Pressable, Text, Animated } from 'react-native'
 import * as Speech from 'expo-speech'
 import * as Clipboard from 'expo-clipboard'
+import Ionicons from '@expo/vector-icons/Ionicons'
 
 import { ColorData } from '@/types'
 import { Colors } from '@/constants'
 import useTheme from '@/hooks/useTheme'
 import { DEFAULT_SHADOW } from '@/constants'
 import useColorData from '@/hooks/useColorData'
-import Ionicons from '@expo/vector-icons/Ionicons'
+import { useToastContext } from '@/contexts/ToastContext'
 
 import Modal from './Modal'
 import Loading from './Loading'
 import ActionButton from './ActionButton'
 import ColorPalette from './ColorPalette'
-interface InfoModalProps {
+interface ColorModalProps {
   isModalVisible: boolean
   setIsModalVisible: (visible: boolean) => void
 }
 
-const InfoModal = ({ isModalVisible, setIsModalVisible }: InfoModalProps) => {
+const ColorModal = ({ isModalVisible, setIsModalVisible }: ColorModalProps) => {
+  const { showToast } = useToastContext()
   const { colorData, isError, isLoading } = useColorData()
   const color = useSelector((state: any) => state.color.color)
 
-  if (isError) return null
+  if (isError) {
+    showToast('Error fetching color data. Try again!')
+    return null
+  }
 
   return (
     <Modal visible={isModalVisible} onClose={() => setIsModalVisible(false)}>
@@ -217,4 +222,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default InfoModal
+export default ColorModal
