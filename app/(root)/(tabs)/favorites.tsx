@@ -10,7 +10,7 @@ import { removeFromFavorites } from '@/redux/reducers/color'
 
 const FavoriteItem = memo(({ item }: { item: Color }) => {
   const dispatch = useDispatch()
-  const customMargin = useMemo(() => ({ marginRight: 6 }), [])
+  const customMargin = useMemo(() => ({ margin: 5 }), [])
 
   const handlePress = useCallback(() => {
     dispatch(removeFromFavorites(item))
@@ -39,7 +39,7 @@ const Favorites = () => {
           numColumns={4}
           data={favorites}
           keyExtractor={(item) => item.hex}
-          contentContainerStyle={{ gap: 10 }}
+          contentContainerStyle={{ gap: 4 }}
           renderItem={({ item }) => <FavoriteItem item={item} />}
         />
       ) : (

@@ -7,7 +7,7 @@ import {
   ViewStyle,
   StyleProp
 } from 'react-native'
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import * as Haptics from 'expo-haptics'
 
 interface ActionButtonProps {

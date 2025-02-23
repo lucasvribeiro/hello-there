@@ -7,7 +7,7 @@ import Achievement from '@/components/Achievement'
 import ScreenWrapper from '@/components/ScreenWrapper'
 
 const Achievements = () => {
-  const customMargin = useMemo(() => ({ marginRight: 8 }), [])
+  const customMargin = useMemo(() => ({ margin: 6 }), [])
 
   return (
     <ScreenWrapper title="Achievements">
@@ -15,7 +15,6 @@ const Achievements = () => {
         data={AchievementsList}
         numColumns={3}
         keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={{ gap: 10 }}
         renderItem={({ item }) => (
           <Achievement key={item.id} achievement={item} customStyle={customMargin} />
         )}

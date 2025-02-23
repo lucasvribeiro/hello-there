@@ -30,6 +30,12 @@ const Settings = () => {
           <Text style={[styles.title, { color: Colors[theme].text }]}>Instructions:</Text>
 
           <Text style={[styles.item, { color: Colors[theme].text }]}>
+            ➡️ <Text style={{ fontFamily: 'Nunito-Bold' }}>Swipe right:</Text> previous color
+          </Text>
+          <Text style={[styles.item, { color: Colors[theme].text }]}>
+            ⬅️ <Text style={{ fontFamily: 'Nunito-Bold' }}>Swipe left:</Text> next color
+          </Text>
+          <Text style={[styles.item, { color: Colors[theme].text }]}>
             1️⃣ <Text style={{ fontFamily: 'Nunito-Bold' }}>Single tap:</Text> next color
           </Text>
           <Text style={[styles.item, { color: Colors[theme].text }]}>
@@ -37,10 +43,7 @@ const Settings = () => {
             favorites
           </Text>
           <Text style={[styles.item, { color: Colors[theme].text }]}>
-            ➡️ <Text style={{ fontFamily: 'Nunito-Bold' }}>Swipe right:</Text> previous color
-          </Text>
-          <Text style={[styles.item, { color: Colors[theme].text }]}>
-            ⬅️ <Text style={{ fontFamily: 'Nunito-Bold' }}>Swipe left:</Text> next color
+            #️⃣ <Text style={{ fontFamily: 'Nunito-Bold' }}>Tap on color hex to copy it!</Text>
           </Text>
         </View>
       </View>

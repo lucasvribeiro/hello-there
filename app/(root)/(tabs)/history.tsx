@@ -9,7 +9,7 @@ import ScreenWrapper from '@/components/ScreenWrapper'
 const History = () => {
   const history = useSelector((state: any) => state.color.history)
 
-  const customMargin = useMemo(() => ({ marginRight: 6 }), [])
+  const customMargin = useMemo(() => ({ margin: 5 }), [])
 
   return (
     <ScreenWrapper title="History">
@@ -18,7 +18,7 @@ const History = () => {
           data={history}
           numColumns={4}
           keyExtractor={(item) => item.hex}
-          contentContainerStyle={{ gap: 10 }}
+          contentContainerStyle={{ gap: 4 }}
           renderItem={({ item }) => (
             <ColorSquare
               width={72}
