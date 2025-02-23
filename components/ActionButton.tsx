@@ -29,7 +29,7 @@ const ActionButton = ({ icon, text, textStyle, containerStyle, onPress }: Action
 
   const handlePressIn = () => {
     Animated.spring(scaleValue, {
-      toValue: 0.9,
+      toValue: 0.8,
       speed: 50,
       useNativeDriver: true
     }).start()

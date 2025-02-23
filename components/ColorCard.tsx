@@ -1,12 +1,6 @@
 import { useEffect } from 'react'
+import { View, StyleSheet, Animated } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import { View, StyleSheet } from 'react-native'
-import Animated, {
-  interpolateColor,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming
-} from 'react-native-reanimated'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import * as Clipboard from 'expo-clipboard'
 
@@ -18,7 +12,7 @@ import { addToFavorites, removeFromFavorites } from '@/redux/reducers/color'
 import ActionButton from './ActionButton'
 import ColorCardButtons from './ColorCardButtons'
 import { useToastContext } from '@/contexts/ToastContext'
-import { memo, useCallback, useMemo } from 'react'
+import { memo, useCallback, useMemo, useRef } from 'react'
 import useColorGestures from '@/hooks/useColorGestures'
 import useAchievement from '@/hooks/useAchievement'
 
@@ -76,26 +70,25 @@ interface ColorCardContentProps {
 
 const ColorCardContent = memo(
   ({ color, buttonColor, handleCopy, handleFavorite, tapGesture }: ColorCardContentProps) => {
+    const progress = useRef(new Animated.Value(0)).current
     const prevColor = useSelector((state: any) => state.color.prevColor)
-    const progress = useSharedValue(0)
 
     useEffect(() => {
-      progress.value = 0
-      progress.value = withTiming(1, { duration: 300 })
+      progress.setValue(0)
+      Animated.timing(progress, {
+        toValue: 1,
+        duration: 400,
+        useNativeDriver: false
+      }).start()
     }, [color.hex])
 
-    const animatedBackgroundColor = useAnimatedStyle(() => {
-      return {
-        backgroundColor: interpolateColor(
-          progress.value,
-          [0, 1],
-          [`#${prevColor.hex}`, `#${color.hex}`]
-        )
-      }
+    const backgroundColor = progress.interpolate({
+      inputRange: [0, 1],
+      outputRange: [`#${prevColor.hex}`, `#${color.hex}`]
     })
 
     return (
-      <Animated.View style={[styles.cardContent, animatedBackgroundColor]}>
+      <Animated.View style={[styles.cardContent, { backgroundColor }]}>
         <View style={styles.actionsContainer}>
           <GestureDetector gesture={tapGesture}>
             <ColorCardButtons.InfoButton />

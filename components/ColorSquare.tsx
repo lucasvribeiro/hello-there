@@ -1,10 +1,9 @@
-import React, { memo, useEffect } from 'react'
-import { StyleSheet, Pressable, ViewStyle, View } from 'react-native'
-import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated'
+import React, { memo, useEffect, useRef } from 'react'
+import { StyleSheet, Pressable, ViewStyle, View, Animated } from 'react-native'
 
 import { Colors } from '@/constants'
-import { DEFAULT_SHADOW } from '@/constants'
 import useTheme from '@/hooks/useTheme'
+import { DEFAULT_SHADOW } from '@/constants'
 
 type ColorSquareProps = {
   color: string
@@ -26,27 +25,33 @@ const ColorSquare = ({
   customStyle
 }: ColorSquareProps) => {
   const theme = useTheme()
-  const scaleValue = useSharedValue(0)
-  const selectedValue = useSharedValue(0)
-
-  scaleValue.value = withTiming(1, { duration: 200 })
-
-  const scaleSquare = useAnimatedStyle(() => {
-    return {
-      transform: [{ scale: scaleValue.value }]
-    }
-  })
-
-  const scaleSelected = useAnimatedStyle(() => {
-    return {
-      opacity: selectedValue.value,
-      transform: [{ scale: selectedValue.value }]
-    }
-  })
+  const scaleValue = useRef(new Animated.Value(0)).current
+  const selectedValue = useRef(new Animated.Value(0)).current
 
   useEffect(() => {
-    selectedValue.value = withTiming(selected ? 1 : 0, { duration: 300 })
+    Animated.timing(scaleValue, {
+      toValue: 1,
+      duration: 200,
+      useNativeDriver: true
+    }).start()
+  }, [])
+
+  useEffect(() => {
+    Animated.timing(selectedValue, {
+      toValue: selected ? 1 : 0,
+      duration: 300,
+      useNativeDriver: true
+    }).start()
   }, [selected])
+
+  const scaleSquare = {
+    transform: [{ scale: scaleValue }]
+  }
+
+  const scaleSelected = {
+    opacity: selectedValue,
+    transform: [{ scale: selectedValue }]
+  }
 
   return (
     <Animated.View style={scaleSquare}>

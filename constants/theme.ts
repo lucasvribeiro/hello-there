@@ -14,11 +14,11 @@ export const Colors = {
 } as const
 
 export const DEFAULT_SHADOW = {
-  shadowColor: '#000',
-  shadowOffset: { width: 0, height: 2 },
-  shadowOpacity: 0.25,
+  elevation: 5,
   shadowRadius: 3,
-  elevation: 5
+  shadowColor: '#000',
+  shadowOpacity: 0.25,
+  shadowOffset: { width: 0, height: 2 }
 } as const
 
 export const LUMINANCE_THRESHOLD = 0.179

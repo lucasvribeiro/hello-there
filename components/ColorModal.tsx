@@ -121,11 +121,8 @@ const ColorCode = ({ label, value }: ColorCodeProps) => {
           <Text style={[styles.colorCodeValue, { color: Colors[theme].text }]}>
             {`${valueString}`}
           </Text>
-          <ActionButton
-            onPress={handleCopy}
-            containerStyle={styles.copyButton}
-            icon={<Ionicons name="copy-outline" size={18} color={`#${color.hex}`} />}
-          />
+
+          <Ionicons style={styles.copyIcon} name="copy-outline" size={18} color={`#${color.hex}`} />
         </Pressable>
       </Animated.View>
     </View>
@@ -151,13 +148,9 @@ const SpeakButton = ({ colorData }: { colorData: ColorData | null }) => {
 }
 
 const styles = StyleSheet.create({
-  copyButton: {
-    padding: 4,
-    marginLeft: 2,
-    borderRadius: 18,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'transparent'
+  copyIcon: {
+    marginLeft: 5,
+    alignSelf: 'center'
   },
   colorCodeContainer: {
     width: '48%',
