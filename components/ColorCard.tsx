@@ -77,7 +77,7 @@ const ColorCardContent = memo(
       progress.setValue(0)
       Animated.timing(progress, {
         toValue: 1,
-        duration: 400,
+        duration: 300,
         useNativeDriver: false
       }).start()
     }, [color.hex])
