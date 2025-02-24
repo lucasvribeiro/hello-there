@@ -1,4 +1,6 @@
-<img src="https://github.com/user-attachments/assets/0a516a83-ba52-4927-b896-6e5967f4bacf" alt="Logo Hello There! Colors App" width="150"/>
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/0a516a83-ba52-4927-b896-6e5967f4bacf" alt="Logo Hello There! Colors App" width="200"/>
+</p>
 
 
 # 🎨 Hello There! Colors App
