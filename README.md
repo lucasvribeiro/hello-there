@@ -47,4 +47,4 @@ Or run `npx expo prebuild` and `npx expo run:android` or `npx expo run:ios` to b
 4. Run `eas build --platform android --profile development` for Android
 5. Run `eas build --platform ios --profile development` for iOS
 
-[Android build available here](https://expo.dev/accounts/lucasvribeiro/projects/hello-there-colors-app/builds/93fb904c-b0e4-4f42-8bd5-573142114004)
+[Android build available here](https://expo.dev/accounts/lucasvribeiro/projects/hello-there-colors-app/builds/c7c1ba2d-e64c-4564-bc21-bb6509fac7b8)
