@@ -1,50 +1,48 @@
-# Welcome to your Expo app 👋
+# Hello There! Colors App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A simple app to help you find the perfect color.
 
-## Get started
+## Features List
 
-1. Install dependencies
+- [x] Generate random colors
+- [x] Smooth color transition
+- [x] Gestures to navigate through colors
+- [x] History of generated colors
+- [x] Copy color hex to clipboard
+- [x] Get color information from API, such as name, hex, rgb, hsl, etc.
+- [x] Get color palettes from API
+- [x] Speech color name
+- [x] Share color with other apps
+- [x] Add or remove color from favorites
+- [x] Dark and light theme
+- [x] Achievements for generating colors
+- [x] Caching API responses with React Query
+- [x] Data persistence with Redux Persist
 
-   ```bash
-   npm install
-   ```
+## Tech Stack
 
-2. Start the app
+- React Native 0.78 (React 18)
+- Expo 52
 
-   ```bash
-    npx expo start
-   ```
+## Requirements
 
-In the output, you'll find options to open the app in a
+- Java JDK 17
+- Node.js 22
+- Expo CLI
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## How to run the app
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+1. Clone the repository
+2. Run `npm install`
+3. Run `npx expo start` to start the development server (to run with Expo Go)
+5. Run `npx expo prebuild` and `npx expo run:android` or `npx expo run:ios` to run the app on your device
 
-## Get a fresh project
+## How to build the app
 
-When you're ready, run:
+1. Run `npm install -g eas-cli`
+2. Run `eas login`
+3. Run `eas build:configure`
+4. Run `eas build --platform android --profile development` for Android
+5. Run `eas build --platform ios --profile development` for iOS
 
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+[Download the build here](https://expo.dev/accounts/lucasvribeiro/projects/hello-there-colors-app/builds/93fb904c-b0e4-4f42-8bd5-573142114004)
