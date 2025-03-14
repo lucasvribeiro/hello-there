@@ -10,7 +10,7 @@ A React Native mobile app to discover amazing random colors.
 ## 📋 Features List
 
 - [x] Generate amazing random colors.
-- [x] Easiy copy color hex code to clipboard.
+- [x] Easily copy color hex code to clipboard.
 - [x] Keep track of all generated colors with a colors history layout.
 - [x] Add or remove colors from favorites.
 - [x] Know other color codes like RGB, HSL and CMYK and easily copy them.
